@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.dfernandezaller
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [annotation-api, app-name, assertj, http-client, http-session, jackson-databind, java, java-application, jib, junit, log4j2, lombok, maven, mockito, properties, readme, shade, test-resources, tomcat-server]
