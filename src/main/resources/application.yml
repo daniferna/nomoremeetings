@@ -1,0 +1,11 @@
+micronaut:
+  application:
+    name: nomoremeetings
+
+google:
+  calendar:
+    api:
+      key: "AIzaSyCS-k9Bt6cIsR08joY_Z0G1dTlHN_5Q2Oo"
+    oauth:
+      id: "814902779569-sljd9h53fmj0e180f9pn3jbha6pm7ive.apps.googleusercontent.com"
+      secret: "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"
