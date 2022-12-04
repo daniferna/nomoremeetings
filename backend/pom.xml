@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dfernandezaller</groupId>
-  <artifactId>nomoremeetings</artifactId>
+  <artifactId>nomoremeetings-backend</artifactId>
   <version>0.1</version>
   <packaging>${packaging}</packaging>
 
@@ -148,7 +148,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <!-- Uncomment to enable incremental compilation -->
-          <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+          <useIncrementalCompilation>false</useIncrementalCompilation>
 
           <annotationProcessorPaths combine.self="override">
             <path>
@@ -179,7 +179,7 @@
           </annotationProcessorPaths>
           <compilerArgs>
             <arg>-Amicronaut.processing.group=com.dfernandezaller</arg>
-            <arg>-Amicronaut.processing.module=nomoremeetings</arg>
+            <arg>-Amicronaut.processing.module=backend</arg>
           </compilerArgs>
         </configuration>
       </plugin>
