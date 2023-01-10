@@ -53,8 +53,8 @@ public class CalendarQuickstart {
     public CalendarQuickstart() throws GeneralSecurityException, IOException {
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         service = new Calendar.Builder(httpTransport, JSON_FACTORY, getCredentials(httpTransport))
-                        .setApplicationName(APPLICATION_NAME)
-                        .build();
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 
     /**

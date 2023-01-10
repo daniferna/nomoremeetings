@@ -1,6 +1,20 @@
 micronaut:
   application:
     name: nomoremeetings
+    security:
+      authentication: idtoken
+      oauth2:
+        clients:
+          google:
+            client-id: '${OAUTH_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'
+            client-secret: '${OAUTH_CLIENT_SECRET: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}'
+            openid:
+              issuer: 'https://accounts.google.com/o/oauth2/v2/auth'
+      endpoints:
+        logout:
+          get-allowed: true
+        login:
+          get-allowed: true
 
 google:
   calendar:
