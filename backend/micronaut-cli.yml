@@ -2,5 +2,5 @@ applicationType: default
 defaultPackage: com.dfernandezaller
 testFramework: junit
 sourceLanguage: java
-buildTool: maven
-features: [annotation-api, app-name, assertj, http-client, http-session, jackson-databind, java, java-application, jib, junit, log4j2, lombok, maven, mockito, properties, readme, shade, test-resources, tomcat-server]
+buildTool: gradle
+features: [annotation-api, app-name, assertj, data, data-r2dbc, gradle, hibernate-reactive-jpa, http-client, jackson-databind, java, java-application, junit, log4j2, lombok, micronaut-build, mockito, netty-server, openapi, postgres, problem-json, properties, r2dbc, reactor, reactor-http-client, readme, security, security-annotations, security-jwt, security-oauth2, security-session, serialization-jackson, shade, test-resources]
