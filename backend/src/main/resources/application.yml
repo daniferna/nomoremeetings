@@ -1,11 +1,33 @@
 micronaut:
+  security:
+    enabled: false
+    endpoints:
+      logout:
+        get-allowed: true
+    oauth2:
+      enabled: true
+      clients:
+        google:
+          client-secret: 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
+          client-id: 814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com
+          openid:
+            issuer: https://accounts.google.com
+          scopes:
+            - https://www.googleapis.com/auth/calendar
+            - https://www.googleapis.com/auth/userinfo.email
+            - https://www.googleapis.com/auth/userinfo.profile
+            - openid
+          authorization:
+            url: https://accounts.google.com/o/oauth2/v2/auth
+          token:
+            url: https://oauth2.googleapis.com/token
+            auth-method: client_secret_post
   application:
-    name: nomoremeetings
-
+    name: nomoremeetings_backend
+netty:
+  default:
+    allocator:
+      max-order: '3'
 google:
-  calendar:
-    api:
-      key: "AIzaSyCS-k9Bt6cIsR08joY_Z0G1dTlHN_5Q2Oo"
-    oauth:
-      id: "814902779569-sljd9h53fmj0e180f9pn3jbha6pm7ive.apps.googleusercontent.com"
-      secret: "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"
+  token:
+    clientId: '${GOOGLE_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'

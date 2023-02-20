@@ -9,7 +9,7 @@
         <Logger name="com.dfernandezaller" level="debug" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
-        <Root level="error">
+        <Root level="INFO">
             <AppenderRef ref="LogToConsole"/>
         </Root>
     </Loggers>

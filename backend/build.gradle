@@ -1,0 +1,78 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.7.0"
+    id("io.micronaut.test-resources") version "3.7.0"
+}
+
+version = "0.1"
+group = "com.dfernandezaller"
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    implementation 'io.micronaut:micronaut-management'
+    annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    implementation("com.ongres.scram:client:2.1")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.data:micronaut-data-r2dbc")
+    implementation("io.micronaut.problem:micronaut-problem-json")
+    implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    implementation("io.micronaut.security:micronaut-security")
+    implementation("io.micronaut.security:micronaut-security-jwt")
+    implementation("io.micronaut.security:micronaut-security-oauth2")
+    implementation("io.micronaut.security:micronaut-security-session")
+    implementation("io.micronaut:micronaut-session")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.sql:micronaut-hibernate-reactive")
+    implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
+    implementation('com.google.api-client:google-api-client:2.1.2')
+    compileOnly("org.projectlombok:lombok")
+    runtimeOnly("org.apache.logging.log4j:log4j-api:2.19.0")
+    runtimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.19.0')
+    runtimeOnly("org.postgresql:r2dbc-postgresql")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.mockito:mockito-core")
+    testResourcesService("org.postgresql:postgresql")
+    implementation("io.micronaut:micronaut-validation")
+    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.16.0'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0'
+}
+
+
+application {
+    mainClass.set("com.dfernandezaller.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(false)
+        annotations("com.dfernandezaller.*")
+    }
+    testResources {
+        additionalModules.add("r2dbc-postgresql")
+    }
+}
+
+
+
