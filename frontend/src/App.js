@@ -1,61 +1,74 @@
 import React from 'react';
-import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
-import axios from "axios";
+import {GoogleLogin, GoogleOAuthProvider, useGoogleLogin} from '@react-oauth/google';
+import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 import {Button} from "react-bootstrap";
 
 function App() {
 
-    let idToken = "";
+    async function onSuccess(code) {
+        console.log(code);
+        const tokens = await axios.post('http://localhost:8080/test/google', code);
 
-    const onSuccess = async (response) => {
-        console.log(response);
+        console.log(tokens);
+    }
 
-        let credential = response.credential;
-        const { access_token, refresh_token } = await axios.post(
-            'http://localhost:8080/test/auth',
-            { credential }
-        );
+    async function onFailure(error) {
+        console.log(error);
+    }
 
-        idToken = credential;
+    function testClick() {
+        axios.get('http://localhost:8080/test')
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
+    }
 
-        console.log(access_token, refresh_token);
-    };
+    const login = useGoogleLogin({
+        onSuccess: async codeResponse => {
+            console.log(codeResponse)
+            const tokens = await axios.post('http://localhost:8080/test/google', {
+                code: codeResponse.code,
+            });
 
-    const onFailure = (error) => {
-        console.error(error);
-    };
+            console.log(tokens);
+        },
+        onError: error => {
+            console.log(error)
+        },
+        flow: 'auth-code',
+    });
 
 
     return (
-        <GoogleOAuthProvider clientId="814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com">
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                    <p/>
-                    <GoogleLogin
-                        buttonText="Login with Google"
-                        onSuccess={onSuccess}
-                        onfailure={onFailure}
-                        accessType="offline"
-                        responseType="code"
-                    />
-                    <Button onClick={exchangeIdTokenForTokens}>Pedir accessToken y refreshToken</Button>
-                </header>
-            </div>
-        </GoogleOAuthProvider>
+        <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo"/>
+                <p>
+                    Edit <code>src/App.js</code> and save to reload.
+                </p>
+                <a
+                    className="App-link"
+                    href="https://reactjs.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Learn React
+                </a>
+                <p/>
+                <GoogleLogin
+                    buttonText="Login with Google"
+                    onSuccess={onSuccess}
+                    onfailure={onFailure}
+                    accessType="offline"
+                    responseType="code"
+                />
+                <p/>
+                <Button onClick={login}>
+                    Sign in with Google 🚀{' '}
+                </Button>
+            </header>
+        </div>
     );
 }
 
