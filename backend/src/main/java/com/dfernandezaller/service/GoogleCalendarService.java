@@ -1,5 +1,6 @@
 package com.dfernandezaller.service;
 
+import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -12,8 +13,11 @@ import com.google.api.services.calendar.model.Events;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import io.micronaut.serde.annotation.SerdeImport;
 import jakarta.inject.Singleton;
 import lombok.SneakyThrows;
+
+import java.util.Date;
 import java.util.List;
 @Singleton
 public class GoogleCalendarService {
@@ -26,10 +30,10 @@ public class GoogleCalendarService {
      */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     @SneakyThrows
-    public List<Event> getCalendarEvents(String token) {
+    public List<Event> getCalendarEvents(TokenResponse token) {
         GoogleCredentials credentials = GoogleCredentials.newBuilder()
-                .setAccessToken(new AccessToken(token, null))
-                .build().createScoped(CalendarScopes.CALENDAR_READONLY);
+                .setAccessToken(new AccessToken(token.getAccessToken(), null))
+                .build();
         var requestInitializer = new HttpCredentialsAdapter(credentials);
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -46,6 +50,8 @@ public class GoogleCalendarService {
                 .setSingleEvents(true)
                 .execute();
         List<Event> items = events.getItems();
+        System.out.println(events.getItems());
+
         return items;
 
         /*if (items.isEmpty()) {

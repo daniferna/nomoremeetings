@@ -1,11 +1,13 @@
-import React from 'react';
-import {GoogleLogin, GoogleOAuthProvider, useGoogleLogin} from '@react-oauth/google';
+import React, {useState} from 'react';
+import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
-import {Button} from "react-bootstrap";
+import {Button, ListGroup, ListGroupItem} from "react-bootstrap";
 
 function App() {
+
+    const [events, setEvents] = useState([]);
 
     async function onSuccess(code) {
         console.log(code);
@@ -27,16 +29,29 @@ function App() {
     const login = useGoogleLogin({
         onSuccess: async codeResponse => {
             console.log(codeResponse)
-            const tokens = await axios.post('http://localhost:8080/test/google', {
+            const {data: events} = await axios.post('http://localhost:8080/test/google', {
                 code: codeResponse.code,
             });
 
-            console.log(tokens);
+            console.log(events);
+            setEvents(events);
         },
         onError: error => {
             console.log(error)
         },
         flow: 'auth-code',
+    });
+
+    const eventItems = events.map((event) => {
+        return (
+            <ListGroupItem key={event.id} action href={event.htmlLink}>
+                <h5>{event.summary}</h5>
+                <p>{event.description}</p>
+                <h6>{event.start.dateTime && new Date(event.start.dateTime.value).toLocaleString()}</h6>
+                <h6>{event.start.date && new Date(event.start.date.value).toDateString()}</h6>
+                {event.location && <p>Location: {event.location}</p>}
+            </ListGroupItem>
+        );
     });
 
 
@@ -67,6 +82,17 @@ function App() {
                 <Button onClick={login}>
                     Sign in with Google 🚀{' '}
                 </Button>
+                <p/>
+                {events.length > 0 &&
+                    <>
+                        <h2>Próximos eventos del calendario</h2>
+                        <div>
+                            <ListGroup>
+                                {eventItems}
+                            </ListGroup>
+                        </div>
+                    </>
+                }
             </header>
         </div>
     );

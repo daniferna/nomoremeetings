@@ -19,6 +19,8 @@ public class CalendarController {
     @Get("events/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getCalendarEvents(@PathVariable String token) {
-        return calendarService.getCalendarEvents(token);
+        //return calendarService.getCalendarEvents(token);
+        return List.of();
+        // TODO: 20/02/2023 Fix this.
     }
 }

@@ -2,22 +2,27 @@ package com.dfernandezaller.controller;
 
 import com.dfernandezaller.authentication.GoogleTokenVerifier;
 import com.dfernandezaller.controller.dto.Credential;
+import com.dfernandezaller.service.GoogleCalendarService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.serde.annotation.SerdeImport;
 import lombok.SneakyThrows;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 // TODO: 20/02/2023 Eliminar @SneakyThrows
@@ -25,12 +30,15 @@ import java.util.Map;
 // TODO: 20/02/2023 Pedir info del user a google y luego guardar ese user en la base de datos. Mirar metodos de la libreria de Google.
 
 @Controller("/test")
+@SerdeImport(DateTime.class)
 public class TestController {
 
     private final GoogleTokenVerifier verifier;
+    private final GoogleCalendarService calendarService;
 
-    public TestController(GoogleTokenVerifier verifier) {
+    public TestController(GoogleTokenVerifier verifier, GoogleCalendarService calendarService) {
         this.verifier = verifier;
+        this.calendarService = calendarService;
     }
 
     @Post(uri = "/auth", consumes = "application/json")
@@ -48,7 +56,7 @@ public class TestController {
 
     @SneakyThrows
     @Post(uri = "/google", consumes = "application/json")
-    public MutableHttpResponse<Object> testGoogle(@Body Map<String, String> code) {
+    public MutableHttpResponse<List<Event>> testGoogle(@Body Map<String, String> code) {
         System.out.println(code);
         System.out.println(code.get("code"));
 
@@ -60,7 +68,9 @@ public class TestController {
         System.out.println("Access token: " + token.getAccessToken());
         System.out.println("Refresh token: " + token.getRefreshToken());
 
-        return HttpResponse.ok("OK");
+        var events = calendarService.getCalendarEvents(token);
+
+        return HttpResponse.ok(events);
     }
 
     @SneakyThrows
