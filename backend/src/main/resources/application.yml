@@ -31,3 +31,13 @@ netty:
 google:
   token:
     clientId: '${GOOGLE_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'
+jpa:
+  default:
+    entity-scan:
+      packages: 'com.dfernandezaller.repository.entity'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
