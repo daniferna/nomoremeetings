@@ -1,16 +1,13 @@
 package com.dfernandezaller.controller;
 
-import com.dfernandezaller.authentication.GoogleTokenVerifier;
+import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
 import com.dfernandezaller.controller.dto.Credential;
+import com.dfernandezaller.repository.GoogleCredentialRepository;
+import com.dfernandezaller.repository.entity.GoogleCredential;
 import com.dfernandezaller.service.GoogleCalendarService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.client.util.store.MemoryDataStoreFactory;
-import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
@@ -21,7 +18,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.serde.annotation.SerdeImport;
 import lombok.SneakyThrows;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,23 +29,25 @@ import java.util.Map;
 @SerdeImport(DateTime.class)
 public class TestController {
 
-    private final GoogleTokenVerifier verifier;
+    private final AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
+    private final GoogleCredentialRepository repository;
     private final GoogleCalendarService calendarService;
 
-    public TestController(GoogleTokenVerifier verifier, GoogleCalendarService calendarService) {
-        this.verifier = verifier;
+    public TestController(AuthorizationCodeFlowFactory authorizationCodeFlowFactory, GoogleCredentialRepository repository, GoogleCalendarService calendarService) {
+        this.authorizationCodeFlowFactory = authorizationCodeFlowFactory;
+        this.repository = repository;
         this.calendarService = calendarService;
+    }
+
+    @Get(uri = "/test")
+    public Iterable<GoogleCredential> test() {
+        return repository.findAll();
     }
 
     @Post(uri = "/auth", consumes = "application/json")
     public String testGoogleAuth(@Body Credential object) {
         System.out.println(object);
         //verifier.verify(object.credential());
-        return "Hello World";
-    }
-
-    @Get
-    public String test() {
         return "Hello World";
     }
 
@@ -60,27 +58,30 @@ public class TestController {
         System.out.println(code);
         System.out.println(code.get("code"));
 
-        AuthorizationCodeFlow authorizationCodeFlow = getAuthorizationCodeFlow();
+        AuthorizationCodeFlow authorizationCodeFlow = authorizationCodeFlowFactory.getAuthorizationCodeFlow();
+
+        if (authorizationCodeFlow.getCredentialDataStore().containsKey("test")) {
+            System.out.println("Ya existe");
+            var accessToken = authorizationCodeFlow.loadCredential("test").getAccessToken();
+            if (accessToken == null) {
+                System.out.println("AccessToken null");
+                return HttpResponse.badRequest();
+            }
+            return HttpResponse.ok(calendarService.getCalendarEvents(accessToken));
+        }
+
         TokenResponse token = authorizationCodeFlow.newTokenRequest(code.get("code"))
-                .setRedirectUri("postmessage") // A mi que me expliquen donde pone esto en la docu de google. Encontrado en: https://stackoverflow.com/questions/11485271/google-oauth-2-authorization-error-redirect-uri-mismatch
+                .setRedirectUri("postmessage") // Encontrado en: https://stackoverflow.com/questions/11485271/google-oauth-2-authorization-error-redirect-uri-mismatch
                 .execute();
+
+        authorizationCodeFlow.createAndStoreCredential(token, "test"); // TODO: 27/03/2023 Implementar flow correcto (recibir email -> checkear si existe en bbdd -> si existe ya esta, si no pedir accessToken desde front)
 
         System.out.println("Access token: " + token.getAccessToken());
         System.out.println("Refresh token: " + token.getRefreshToken());
 
-        var events = calendarService.getCalendarEvents(token);
+        var events = calendarService.getCalendarEvents(token.getAccessToken());
 
         return HttpResponse.ok(events);
-    }
-
-    @SneakyThrows
-    private AuthorizationCodeFlow getAuthorizationCodeFlow() {
-        return new GoogleAuthorizationCodeFlow.Builder(
-                new NetHttpTransport(), GsonFactory.getDefaultInstance(),
-                "814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com",
-                "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",
-                Collections.singleton(CalendarScopes.CALENDAR_READONLY)).setDataStoreFactory(
-                new MemoryDataStoreFactory()).setAccessType("offline").build();
     }
 
 }

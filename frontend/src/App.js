@@ -20,12 +20,6 @@ function App() {
         console.log(error);
     }
 
-    function testClick() {
-        axios.get('http://localhost:8080/test')
-            .then(response => console.log(response))
-            .catch(error => console.log(error));
-    }
-
     const login = useGoogleLogin({
         onSuccess: async codeResponse => {
             console.log(codeResponse)
@@ -40,6 +34,7 @@ function App() {
             console.log(error)
         },
         flow: 'auth-code',
+        scope: 'https://www.googleapis.com/auth/calendar.readonly',
     });
 
     const eventItems = events.map((event) => {

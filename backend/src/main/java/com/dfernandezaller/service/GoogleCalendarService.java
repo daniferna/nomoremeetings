@@ -1,5 +1,6 @@
 package com.dfernandezaller.service;
 
+import antlr.Token;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -13,11 +14,11 @@ import com.google.api.services.calendar.model.Events;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.OAuth2Credentials;
 import io.micronaut.serde.annotation.SerdeImport;
 import jakarta.inject.Singleton;
 import lombok.SneakyThrows;
 
-import java.util.Date;
 import java.util.List;
 @Singleton
 public class GoogleCalendarService {
@@ -29,10 +30,11 @@ public class GoogleCalendarService {
      * Global instance of the JSON factory.
      */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
     @SneakyThrows
-    public List<Event> getCalendarEvents(TokenResponse token) {
+    public List<Event> getCalendarEvents(String accessToken) {
         GoogleCredentials credentials = GoogleCredentials.newBuilder()
-                .setAccessToken(new AccessToken(token.getAccessToken(), null))
+                .setAccessToken(new AccessToken(accessToken, null))
                 .build();
         var requestInitializer = new HttpCredentialsAdapter(credentials);
         // Build a new authorized API client service.
