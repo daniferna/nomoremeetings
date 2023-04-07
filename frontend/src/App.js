@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
+import {GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
-import {Button, ListGroup, ListGroupItem} from "react-bootstrap";
+import {ListGroup, ListGroupItem} from "react-bootstrap";
 
 function App() {
 
@@ -11,31 +11,16 @@ function App() {
 
     async function onSuccess(code) {
         console.log(code);
-        const tokens = await axios.post('http://localhost:8080/test/google', code);
-
-        console.log(tokens);
+        await axios.post('http://localhost:8080/auth/login', {
+            idToken: code.credential,
+        }).then((res) => {
+            console.log(res.data)
+        }).catch((err) => console.log(err));
     }
 
     async function onFailure(error) {
         console.log(error);
     }
-
-    const login = useGoogleLogin({
-        onSuccess: async codeResponse => {
-            console.log(codeResponse)
-            const {data: events} = await axios.post('http://localhost:8080/test/google', {
-                code: codeResponse.code,
-            });
-
-            console.log(events);
-            setEvents(events);
-        },
-        onError: error => {
-            console.log(error)
-        },
-        flow: 'auth-code',
-        scope: 'https://www.googleapis.com/auth/calendar.readonly',
-    });
 
     const eventItems = events.map((event) => {
         return (
@@ -48,7 +33,6 @@ function App() {
             </ListGroupItem>
         );
     });
-
 
     return (
         <div className="App">
@@ -66,17 +50,7 @@ function App() {
                     Learn React
                 </a>
                 <p/>
-                <GoogleLogin
-                    buttonText="Login with Google"
-                    onSuccess={onSuccess}
-                    onfailure={onFailure}
-                    accessType="offline"
-                    responseType="code"
-                />
-                <p/>
-                <Button onClick={login}>
-                    Sign in with Google 🚀{' '}
-                </Button>
+                <GoogleLogin onSuccess={onSuccess} onFailure={onFailure}/>
                 <p/>
                 {events.length > 0 &&
                     <>

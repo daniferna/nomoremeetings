@@ -52,7 +52,7 @@ public class GoogleTokenVerifier implements TokenVerifier {
             // ...
             logger.info("name is: {}", name);
 
-            return new VerificationResult(true, Optional.ofNullable(name), Optional.empty());
+            return new VerificationResult(true, Optional.ofNullable(email), Optional.empty());
 
         } else {
             logger.warn("Invalid ID token.");
