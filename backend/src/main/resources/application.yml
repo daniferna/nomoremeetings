@@ -12,8 +12,8 @@ netty:
     allocator:
       max-order: '3'
 google:
-  token:
-    clientId: '${GOOGLE_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'
+  clientId: '${GOOGLE_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'
+  clientSecret: '${GOOGLE_CLIENT_SECRET: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}'
 jpa:
   default:
     entity-scan:

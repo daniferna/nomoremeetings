@@ -12,7 +12,7 @@ function LoginComponent() {
     const [postSignUpObject, setPostSignUpObject] = useState(null);
 
     useEffect(() => {
-        if (postSignUpObject !== null && idToken !== null) {
+        if (postSignUpObject !== null && idToken !== null && needSignUp === true) {
             console.log("Sending post-signup data to backend");
             axios.post('http://localhost:8080/auth/signup',
                 {

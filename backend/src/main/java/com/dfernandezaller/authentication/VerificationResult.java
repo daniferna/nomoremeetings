@@ -1,6 +1,20 @@
 package com.dfernandezaller.authentication;
 
-import java.util.Optional;
+import io.micronaut.serde.annotation.Serdeable;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record VerificationResult(boolean isValid, Optional<String> email, Optional<String> failureReason) {
+@Data
+@Serdeable
+@NoArgsConstructor
+public abstract class VerificationResult {
+
+    private boolean isValid;
+    private String failureReason;
+
+    protected VerificationResult(boolean isValid, String failureReason) {
+        this.isValid = isValid;
+        this.failureReason = failureReason;
+    }
+
 }

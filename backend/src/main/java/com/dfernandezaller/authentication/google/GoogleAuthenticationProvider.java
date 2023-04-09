@@ -1,6 +1,6 @@
-package com.dfernandezaller.authentication;
+package com.dfernandezaller.authentication.google;
 
-import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
+import com.dfernandezaller.service.imp.GoogleTokenVerifier;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationProvider;
@@ -16,11 +16,11 @@ import java.util.Map;
 public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
     private final GoogleTokenVerifier verifier;
-    private final AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
+    private final GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory;
 
-    public GoogleAuthenticationProvider(GoogleTokenVerifier verifier, AuthorizationCodeFlowFactory authorizationCodeFlowFactory) {
+    public GoogleAuthenticationProvider(GoogleTokenVerifier verifier, GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory) {
         this.verifier = verifier;
-        this.authorizationCodeFlowFactory = authorizationCodeFlowFactory;
+        this.googleAuthorizationCodeFlowFactory = googleAuthorizationCodeFlowFactory;
     }
 
     @Override
@@ -30,17 +30,18 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
             try {
                 var result = verifier.verify((String) authenticationRequest.getSecret());
                 if (result.isValid()) {
-                    var authorizationCodeFlow = authorizationCodeFlowFactory.getAuthorizationCodeFlow();
-                    var googleUserData = authorizationCodeFlow.getCredentialDataStore().get(result.email().orElseThrow());
+                    var authorizationCodeFlow = googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow();
+                    var googleUserData = authorizationCodeFlow.getCredentialDataStore().get(result.getPayload().getEmail());
 
                     if (googleUserData == null) {
                         emitter.next(AuthenticationResponse.failure(AuthenticationFailureReason.USER_NOT_FOUND));
                         return;
                     }
 
-                    emitter.next(AuthenticationResponse.success(result.email().get(), Map.of("accessToken", googleUserData.getAccessToken())));
+                    emitter.next(AuthenticationResponse.success(result.getPayload().getEmail(),
+                            Map.of("accessToken", googleUserData.getAccessToken())));
                 } else {
-                    emitter.next(AuthenticationResponse.failure(result.failureReason().orElse("Unknown reason")));
+                    emitter.next(AuthenticationResponse.failure(result.getFailureReason()));
                 }
             } catch (Exception e) {
                 emitter.error(e);
