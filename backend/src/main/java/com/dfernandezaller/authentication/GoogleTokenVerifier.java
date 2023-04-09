@@ -5,10 +5,11 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import jakarta.inject.Singleton;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -28,9 +29,8 @@ public class GoogleTokenVerifier implements TokenVerifier {
         logger.warn("CLIENT ID: {}", clientId);
     }
 
-    @SneakyThrows // TODO: 16/01/2023 REMOVE THIS
     @Override
-    public VerificationResult verify(String token) {
+    public VerificationResult verify(String token) throws GeneralSecurityException, IOException {
         GoogleIdToken idToken = verifier.verify(token);
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();

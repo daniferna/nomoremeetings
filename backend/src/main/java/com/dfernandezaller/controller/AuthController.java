@@ -2,7 +2,6 @@ package com.dfernandezaller.controller;
 
 import com.dfernandezaller.authentication.GoogleTokenVerifier;
 import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
-import com.dfernandezaller.controller.dto.GoogleLoginData;
 import com.dfernandezaller.controller.dto.GoogleSignupData;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.TokenResponse;
@@ -11,12 +10,17 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.authentication.Authentication;
+import io.micronaut.security.rules.SecurityRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @Controller("/auth")
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class AuthController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
@@ -28,42 +32,38 @@ public class AuthController {
         this.verifier = verifier;
     }
 
-    // TODO [Daniel Fernandez, 06/04/2023] Move logic out of controller into service/filter.
     @Post(uri = "/login", consumes = "application/json")
-    public HttpResponse<String> loginGoogle(@Body GoogleLoginData loginData) throws IOException {
-
-        var resultVerifier = verifier.verify(loginData.idToken());
-        if (!resultVerifier.isValid()) {
-            LOG.trace("Token {} is not valid", loginData.idToken());
-            return HttpResponse.badRequest(resultVerifier.failureReason().orElse("Unknown reason"));
-        }
-
-        AuthorizationCodeFlow authorizationCodeFlow = authorizationCodeFlowFactory.getAuthorizationCodeFlow();
-        if (authorizationCodeFlow.getCredentialDataStore().containsKey(resultVerifier.email().orElseThrow())) {
-            LOG.trace("Found credential for email: {}", resultVerifier.email().get());
-            return HttpResponse.ok();
-        }
-
-        return HttpResponse.status(HttpStatus.FORBIDDEN, "User not found").body(resultVerifier.email().get());
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    public HttpResponse<String> loginGoogle(Authentication authentication) {
+        return HttpResponse.ok(authentication.getName() + " - " + authentication.getAttributes().get("accessToken"));
     }
 
+    // TODO [Daniel Fernandez, 06/04/2023] Move logic out of controller into service/filter.
     @Post(uri = "/signup", consumes = "application/json")
-    public HttpResponse<String> signupGoogle(@Body GoogleSignupData signupData) throws IOException {
+    public HttpResponse<String> signupGoogle(@Body GoogleSignupData signupData) throws IOException, GeneralSecurityException {
+
+        var result = verifier.verify(signupData.idToken());
+        if (!result.isValid()) {
+            LOG.warn("Invalid ID token");
+            return HttpResponse.status(HttpStatus.UNAUTHORIZED, "Invalid ID token");
+        }
+        var email = result.email().orElseThrow();
+
         AuthorizationCodeFlow authorizationCodeFlow = authorizationCodeFlowFactory.getAuthorizationCodeFlow();
 
         TokenResponse token = authorizationCodeFlow.newTokenRequest(signupData.codeToken())
                 .setRedirectUri("postmessage") // Encontrado en: https://stackoverflow.com/questions/11485271/google-oauth-2-authorization-error-redirect-uri-mismatch
                 .execute();
 
-        if (authorizationCodeFlow.getCredentialDataStore().containsKey(signupData.email())) {
-            LOG.trace("Found credential for email: {}", signupData.email());
+        if (authorizationCodeFlow.getCredentialDataStore().containsKey(email)) {
+            LOG.trace("Found credential for email: {}", email);
             return HttpResponse.status(HttpStatus.CONFLICT, "User already exists");
         }
 
-        authorizationCodeFlow.createAndStoreCredential(token, signupData.email());
-        LOG.trace("Stored credential for email: {}", signupData.email());
+        authorizationCodeFlow.createAndStoreCredential(token, email);
+        LOG.trace("Stored credential for email: {}", email);
 
-        return HttpResponse.created(signupData.email());
+        return HttpResponse.created(email);
     }
 
 }
