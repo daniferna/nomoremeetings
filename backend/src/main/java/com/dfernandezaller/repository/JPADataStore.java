@@ -7,12 +7,12 @@ import com.google.api.client.util.store.DataStore;
 import com.google.common.collect.Streams;
 import jakarta.inject.Singleton;
 
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.toIntExact;
 import static java.time.Instant.now;
 
 
@@ -31,7 +31,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
 
     @Override
     public int size() {
-        return (int) repository.count();
+        return toIntExact(repository.count());
     }
 
     @Override
