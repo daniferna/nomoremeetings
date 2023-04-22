@@ -2,7 +2,7 @@ package com.dfernandezaller.service.imp;
 
 import com.dfernandezaller.authentication.google.dto.GoogleVerificationResult;
 import com.dfernandezaller.configuration.GoogleConfiguration;
-import com.dfernandezaller.exceptions.BussinessException;
+import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.service.TokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -39,7 +39,7 @@ public class GoogleTokenVerifier implements TokenVerifier {
         } catch (GeneralSecurityException e) {
             throw new SecurityException("There is a problem with the signature of the provided token", e);
         } catch (IOException e) {
-            throw new BussinessException("There has been an I/O problem while verifying the token", e);
+            throw new BusinessException("There has been an I/O problem while verifying the token", e);
         }
 
         if (idToken != null) {

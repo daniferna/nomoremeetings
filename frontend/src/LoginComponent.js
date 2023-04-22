@@ -34,7 +34,7 @@ function LoginComponent() {
                 console.log(err)
             });
         }
-    });
+    }, [postSignUpObject, idToken, needSignUp]);
 
     const signUp = useGoogleLogin({
         onSuccess: (response) => {

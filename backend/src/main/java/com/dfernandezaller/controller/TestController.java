@@ -1,11 +1,15 @@
 package com.dfernandezaller.controller;
 
 import com.dfernandezaller.repository.GoogleCredentialRepository;
-import com.dfernandezaller.repository.entity.GoogleCredential;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
+
+import java.util.Set;
 
 @Controller("/test")
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class TestController {
 
     private final GoogleCredentialRepository repository;
@@ -15,8 +19,8 @@ public class TestController {
     }
 
     @Get(uri = "/test")
-    public Iterable<GoogleCredential> test() {
-        return repository.findAll();
+    public Set<String> test() {
+        return repository.findKey();
     }
 
 }

@@ -8,7 +8,6 @@ import lombok.Data;
 @Serdeable
 @ConfigurationProperties("google")
 public class GoogleConfiguration {
-
     private String clientId;
     private String clientSecret;
 

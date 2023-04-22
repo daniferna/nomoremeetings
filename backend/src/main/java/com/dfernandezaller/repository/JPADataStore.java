@@ -51,7 +51,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
 
     @Override
     public Set<String> keySet() {
-        return repository.findAllKeys();
+        return repository.findKey();
     }
 
     @Override

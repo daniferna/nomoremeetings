@@ -1,7 +1,10 @@
 package com.dfernandezaller.service;
 
+import com.dfernandezaller.service.dto.UserDTO;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+
 public interface AuthenticationService {
 
-    String signupUser(String email, String token);
+    UserDTO signupUser(GoogleIdToken.Payload payload, String token);
 
 }
