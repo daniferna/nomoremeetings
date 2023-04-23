@@ -1,8 +1,8 @@
 package com.dfernandezaller.service.imp;
 
+import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.repository.UserRepository;
 import com.dfernandezaller.service.UserService;
-import com.dfernandezaller.service.dto.UserDTO;
 import io.micronaut.core.convert.ConversionService;
 import jakarta.inject.Singleton;
 

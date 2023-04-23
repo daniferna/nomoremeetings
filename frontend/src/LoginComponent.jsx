@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {GoogleLogin, useGoogleLogin} from "@react-oauth/google";
-import Nav from "react-bootstrap/Nav";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import {MDBNavbarLink} from "mdb-react-ui-kit";
 
-function LoginComponent() {
+function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
-    const [loggedIn, setLoggedIn] = useState(false);
     const [needLogIn, setNeedLogIn] = useState(true);
     const [needSignUp, setNeedSignUp] = useState(false);
     const [idToken, setIdToken] = useState(null);
@@ -30,11 +29,12 @@ function LoginComponent() {
                     setNeedSignUp(false)
                     setNeedLogIn(false)
                     setLoggedIn(true)
+                    setUser(res.data)
                 }).catch((err) => {
                 console.log(err)
             });
         }
-    }, [postSignUpObject, idToken, needSignUp]);
+    }, [postSignUpObject, idToken, needSignUp, setLoggedIn]);
 
     const signUp = useGoogleLogin({
         onSuccess: (response) => {
@@ -67,6 +67,7 @@ function LoginComponent() {
                 console.log(res.data)
                 setNeedLogIn(false);
                 setLoggedIn(true);
+                setUser(res.data)
             }).catch((err) => {
                 console.log(err)
                 if (err.response.status === 401) {
@@ -88,11 +89,11 @@ function LoginComponent() {
                 : null
             }
             {needSignUp
-                ? <Nav.Link onClick={signUp}>Sign Up</Nav.Link>
+                ? <MDBNavbarLink onClick={signUp}>Sign Up</MDBNavbarLink>
                 : null
             }
             {loggedIn
-                ? <Nav.Link onClick={clickLogOut}>Log Out</Nav.Link>
+                ? <MDBNavbarLink onClick={clickLogOut}>Log Out</MDBNavbarLink>
                 : null
             }
         </div>

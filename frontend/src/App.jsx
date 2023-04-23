@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Navbar from "./Navbar";
+import UserProfile from "./UserProfile";
 
 function App() {
 
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+
     return (
         <div className="App">
-            <Navbar/>
+            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser}/>
+            {(loggedIn && user != null) ? <UserProfile user={user}/> : null}
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
                 <p>

@@ -1,6 +1,6 @@
 package com.dfernandezaller.service;
 
-import com.dfernandezaller.service.dto.UserDTO;
+import com.dfernandezaller.controller.dto.UserDTO;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package com.dfernandezaller.controller;
 
 import com.dfernandezaller.controller.dto.GoogleSignupData;
+import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.service.AuthenticationService;
 import com.dfernandezaller.service.UserService;
-import com.dfernandezaller.service.dto.UserDTO;
 import com.dfernandezaller.service.imp.GoogleTokenVerifier;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;

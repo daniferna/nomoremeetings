@@ -1,7 +1,7 @@
 package com.dfernandezaller.conversion;
 
+import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.repository.entity.User;
-import com.dfernandezaller.service.dto.UserDTO;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.TypeConverter;
 import jakarta.inject.Singleton;
@@ -17,6 +17,9 @@ public class UserToUserDTO implements TypeConverter<User, UserDTO> {
                 .email(user.getEmail())
                 .name(user.getName())
                 .urlPhoto(user.getUrlPhoto())
+                .startWorkingTime(user.getStartWorkingTime())
+                .endWorkingTime(user.getEndWorkingTime())
+                .lunchTime(user.getLunchTime())
                 .build()
         );
     }

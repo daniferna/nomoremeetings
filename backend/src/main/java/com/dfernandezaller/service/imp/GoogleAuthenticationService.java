@@ -1,11 +1,11 @@
 package com.dfernandezaller.service.imp;
 
 import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.repository.UserRepository;
 import com.dfernandezaller.repository.entity.User;
 import com.dfernandezaller.service.AuthenticationService;
-import com.dfernandezaller.service.dto.UserDTO;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
