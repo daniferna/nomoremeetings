@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import {MDBNavbarLink} from "mdb-react-ui-kit";
+import {MDBBtn, MDBNavbarItem, MDBNavbarLink, MDBNavbarNav} from "mdb-react-ui-kit";
 
 function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
@@ -89,11 +89,11 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                 : null
             }
             {needSignUp
-                ? <MDBNavbarLink onClick={signUp}>Sign Up</MDBNavbarLink>
+                ? <MDBBtn onClick={signUp}>Signup</MDBBtn>
                 : null
             }
             {loggedIn
-                ? <MDBNavbarLink onClick={clickLogOut}>Log Out</MDBNavbarLink>
+                ? <MDBBtn onClick={clickLogOut}>Logout</MDBBtn>
                 : null
             }
         </div>
