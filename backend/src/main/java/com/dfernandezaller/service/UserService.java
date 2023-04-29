@@ -9,5 +9,5 @@ public interface UserService {
 
     Optional<UserDTO> getUser(String email);
 
-    boolean updateUser(String email, UpdateWorkingHoursRequestDTO requestDTO);
+    Optional<UserDTO> updateUser(String email, UpdateWorkingHoursRequestDTO requestDTO);
 }

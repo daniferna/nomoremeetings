@@ -3,7 +3,6 @@ package com.dfernandezaller.controller;
 import com.dfernandezaller.controller.dto.UpdateWorkingHoursRequestDTO;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.service.UserService;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Patch;
@@ -27,9 +26,8 @@ public class UserController {
     }
 
     @Patch
-    public HttpResponse<Void> updateUserWorkingHours(Authentication authentication, UpdateWorkingHoursRequestDTO requestDTO) {
-        return userService.updateUser(authentication.getName(), requestDTO)
-                ? HttpResponse.ok() : HttpResponse.badRequest();
+    public UserDTO updateUserWorkingHours(Authentication authentication, UpdateWorkingHoursRequestDTO requestDTO) {
+        return userService.updateUser(authentication.getName(), requestDTO).orElseThrow();
     }
 
 }

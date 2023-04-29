@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import {MDBBtn, MDBNavbarItem, MDBNavbarLink, MDBNavbarNav} from "mdb-react-ui-kit";
+import {GoogleLogin, useGoogleLogin} from "@react-oauth/google";
+import {MDBBtn} from "mdb-react-ui-kit";
 
 function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
@@ -25,11 +25,12 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                     }
                 })
                 .then((res) => {
-                    console.log(res.data)
                     setNeedSignUp(false)
                     setNeedLogIn(false)
                     setLoggedIn(true)
-                    setUser(res.data)
+                    let userWithIdToken = res.data;
+                    userWithIdToken.idToken = idToken;
+                    setUser(userWithIdToken)
                 }).catch((err) => {
                 console.log(err)
             });
@@ -67,7 +68,9 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                 console.log(res.data)
                 setNeedLogIn(false);
                 setLoggedIn(true);
-                setUser(res.data)
+                let userWithIdToken = res.data;
+                userWithIdToken.idToken = code.credential;
+                setUser(userWithIdToken)
             }).catch((err) => {
                 console.log(err)
                 if (err.response.status === 401) {
@@ -93,7 +96,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                 : null
             }
             {loggedIn
-                ? <MDBBtn onClick={clickLogOut}>Logout</MDBBtn>
+                ? <MDBBtn color="danger" outline onClick={clickLogOut}>Logout</MDBBtn>
                 : null
             }
         </div>

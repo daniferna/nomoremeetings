@@ -28,15 +28,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean updateUser(String email, UpdateWorkingHoursRequestDTO requestDTO) {
+    public Optional<UserDTO> updateUser(String email, UpdateWorkingHoursRequestDTO requestDTO) {
         var userDb = userRepository.findById(email).orElseThrow();
         var updatedUser = userDb.toBuilder()
                 .startWorkingTime(requestDTO.startWorkingTime())
                 .endWorkingTime(requestDTO.endWorkingTime())
                 .lunchTime(requestDTO.lunchTime())
                 .build();
-        userRepository.update(updatedUser);
-        return true;
+        return conversionService.convert(userRepository.update(updatedUser), UserDTO.class);
     }
 
 }

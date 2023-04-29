@@ -12,21 +12,22 @@ function App() {
     return (
         <div className="App">
             <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser}/>
-            {(loggedIn && user != null) ? <UserProfile user={user}/> : null}
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo"/>
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+            {(loggedIn && user != null) ? <UserProfile user={user} setUser={setUser}/> :
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo"/>
+                    <p>
+                        Edit <code>src/App.js</code> and save to reload.
+                    </p>
+                    <a
+                        className="App-link"
+                        href="https://reactjs.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Learn React
+                    </a>
+                </header>}
+
         </div>
     );
 }
