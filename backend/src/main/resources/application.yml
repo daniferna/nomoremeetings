@@ -1,4 +1,8 @@
 micronaut:
+  server:
+    port: 80
+    cors:
+      enabled: true
   security:
     enabled: true
     authentication: session
@@ -14,6 +18,14 @@ netty:
 google:
   clientId: '${GOOGLE_CLIENT_ID:814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com}'
   clientSecret: '${GOOGLE_CLIENT_SECRET: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}'
+datasources:
+  default:
+    url: '${DB_URL:`jdbc:postgresql://nomoremeetings-db.postgres.database.azure.com:5432/nomoremeetings?sslmode=require`}'
+    driverClassName: org.postgresql.Driver
+    username: '${DB_USERNAME:nomoremeetings}'
+    password: '${DB_PASSWORD:yHMea8E22kf5ub6}'
+    schema-generate: CREATE_DROP
+    dialect: POSTGRES
 jpa:
   default:
     entity-scan:

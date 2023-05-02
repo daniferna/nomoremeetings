@@ -13,7 +13,6 @@ import {
     MDBNavbarNav,
     MDBNavbarToggler,
 } from 'mdb-react-ui-kit';
-import logo from './logoNoMoreMeetings.svg';
 import LoginComponent from "./LoginComponent";
 import {useState} from "react";
 
@@ -25,7 +24,7 @@ function AppMDBNavbar({loggedIn, setLoggedIn, setUser}) {
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
                 <MDBNavbarBrand href='#'>
-                    <img src={logo} loading={"lazy"} height={30}></img>
+                    <img src="/logoNoMoreMeetings.svg" loading={"lazy"} height={30}></img>
                     NoMoreMeetings
                 </MDBNavbarBrand>
 

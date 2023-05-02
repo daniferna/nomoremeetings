@@ -6,21 +6,19 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 
-import java.util.Set;
-
-@Controller("/test")
+@Controller
 @Secured(SecurityRule.IS_ANONYMOUS)
-public class TestController {
+public class IndexController {
 
     private final GoogleCredentialRepository repository;
 
-    public TestController(GoogleCredentialRepository repository) {
+    public IndexController(GoogleCredentialRepository repository) {
         this.repository = repository;
     }
 
-    @Get(uri = "/test")
-    public Set<String> test() {
-        return repository.findKey();
+    @Get
+    public String index() {
+        return "Hello World! This is nomoremeetings project's API.";
     }
 
 }

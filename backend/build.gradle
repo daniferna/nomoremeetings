@@ -2,6 +2,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.0"
     id("io.micronaut.test-resources") version "3.7.0"
+    id "com.microsoft.azure.azurewebapp" version "1.1.0"
 }
 
 version = "0.1"
@@ -64,6 +65,11 @@ java {
     targetCompatibility = JavaVersion.toVersion("17")
 }
 
+shadowJar {
+    archiveFileName="app.jar"
+    mergeServiceFiles()
+}
+
 graalvmNative.toolchainDetection = false
 micronaut {
     runtime("netty")
@@ -74,6 +80,24 @@ micronaut {
     }
     testResources {
         additionalModules.add("r2dbc-postgresql")
+    }
+}
+
+shadowJar {
+    archiveFileName="app.jar"
+    mergeServiceFiles()
+}
+
+azurewebapp {
+    subscription = 'e0f1a637-c133-48fd-b1a9-a4bff7426016'
+    resourceGroup = 'nomoremeetings-uniovi-rg'
+    appName = 'NoMoreMeetings-back'
+    pricingTier = 'Free_F1'
+    region = 'westeurope'
+    runtime {
+        os = 'Linux'
+        webContainer = 'Java SE'
+        javaVersion = 'Java 17'
     }
 }
 

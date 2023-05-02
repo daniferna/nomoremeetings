@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TimePicker} from '@mui/x-date-pickers';
 import {
     MDBBreadcrumb,
@@ -27,6 +27,13 @@ import axios from "axios";
 
 export default function UserProfile({user, setUser}) {
 
+    useEffect(() => {
+        //todo controlar user null
+        //todo usar localstorage
+    });
+
+    const backendHost = process.env.REACT_APP_BACKEND_HOST;
+
     const [hoursModal, setHoursModal] = useState(false);
     const [startWorkingTime, setStartWorkingTime] = useState(dayjs(user.startWorkingTime, 'HH:mm'));
     const [endWorkingTime, setEndWorkingTime] = useState(dayjs(user.endWorkingTime, 'HH:mm'));
@@ -35,7 +42,7 @@ export default function UserProfile({user, setUser}) {
     const toggleModalHours = () => setHoursModal(!hoursModal);
 
     function saveNewTimes() {
-        axios.patch('http://localhost:8080/user', {
+        axios.patch(backendHost + '/user', {
                 startWorkingTime: startWorkingTime.format('HH:mm'),
                 endWorkingTime: endWorkingTime.format('HH:mm'),
                 lunchTime: lunchTime.format('HH:mm')

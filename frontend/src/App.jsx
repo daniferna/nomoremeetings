@@ -1,35 +1,26 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Navbar from "./Navbar";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserProfile from "./UserProfile";
+import Layout from "./routes/Layout";
+import Home from "./routes/Home";
+import ErrorPage from "./routes/ErrorPage";
 
 function App() {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
 
-    return (
-        <div className="App">
-            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser}/>
-            {(loggedIn && user != null) ? <UserProfile user={user} setUser={setUser}/> :
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                </header>}
-
-        </div>
-    );
+    return (<BrowserRouter>
+        <Routes>
+            <Route path="/"
+                   element={<Layout loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} setUser={setUser}/>}>
+                <Route index element={<Home/>}/>
+                <Route path="/userProfile" element={<UserProfile setUser={setUser} user={user}/>}/>
+                <Route path="*" element={<ErrorPage/>}/>
+            </Route>
+        </Routes>
+    </BrowserRouter>);
 }
 
 export default App;

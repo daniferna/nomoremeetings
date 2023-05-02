@@ -5,6 +5,8 @@ import {MDBBtn} from "mdb-react-ui-kit";
 
 function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
+    const backendHost = process.env.REACT_APP_BACKEND_HOST;
+
     const [needLogIn, setNeedLogIn] = useState(true);
     const [needSignUp, setNeedSignUp] = useState(false);
     const [idToken, setIdToken] = useState(null);
@@ -13,7 +15,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
     useEffect(() => {
         if (postSignUpObject !== null && idToken !== null && needSignUp === true) {
             console.log("Sending post-signup data to backend");
-            axios.post('http://localhost:8080/auth/signup',
+            axios.post(backendHost + '/auth/signup',
                 {
                     codeToken: postSignUpObject.code,
                     idToken: idToken
@@ -57,7 +59,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
     async function onSuccess(code) {
         setIdToken(code.credential);
-        await axios.post('http://localhost:8080/auth/login', {},
+        await axios.post(backendHost + '/auth/login', {},
             {
                 auth: {
                     username: null,
