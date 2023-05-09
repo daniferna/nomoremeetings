@@ -2,15 +2,23 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {GoogleLogin, useGoogleLogin} from "@react-oauth/google";
 import {MDBBtn} from "mdb-react-ui-kit";
+import {useNavigate} from "react-router-dom";
 
-function LoginComponent({loggedIn, setLoggedIn, setUser}) {
+function LoginComponent() {
 
     const backendHost = process.env.REACT_APP_BACKEND_HOST;
 
-    const [needLogIn, setNeedLogIn] = useState(true);
+    const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
+    const navigate = useNavigate();
+
     const [needSignUp, setNeedSignUp] = useState(false);
     const [idToken, setIdToken] = useState(null);
     const [postSignUpObject, setPostSignUpObject] = useState(null);
+
+    function setUserSessionStorage(user) {
+        sessionStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+    }
 
     useEffect(() => {
         if (postSignUpObject !== null && idToken !== null && needSignUp === true) {
@@ -28,16 +36,14 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                 })
                 .then((res) => {
                     setNeedSignUp(false)
-                    setNeedLogIn(false)
-                    setLoggedIn(true)
                     let userWithIdToken = res.data;
                     userWithIdToken.idToken = idToken;
-                    setUser(userWithIdToken)
+                    setUserSessionStorage(userWithIdToken)
                 }).catch((err) => {
                 console.log(err)
             });
         }
-    }, [postSignUpObject, idToken, needSignUp, setLoggedIn]);
+    }, [postSignUpObject, idToken, needSignUp, backendHost]);
 
     const signUp = useGoogleLogin({
         onSuccess: (response) => {
@@ -53,8 +59,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
     function clickLogOut() {
         console.log("Logging out");
-        setNeedLogIn(true);
-        setLoggedIn(false);
+        setUserSessionStorage(null);
     }
 
     async function onSuccess(code) {
@@ -68,16 +73,14 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
             })
             .then((res) => {
                 console.log(res.data)
-                setNeedLogIn(false);
-                setLoggedIn(true);
                 let userWithIdToken = res.data;
                 userWithIdToken.idToken = code.credential;
-                setUser(userWithIdToken)
+                setUserSessionStorage(userWithIdToken)
+                navigate("/userProfile");
             }).catch((err) => {
                 console.log(err)
                 if (err.response.status === 401) {
                     console.log("Unauthorized");
-                    setNeedLogIn(false);
                     setNeedSignUp(true);
                 }
             });
@@ -89,7 +92,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
 
     return (
         <div>
-            {needLogIn
+            {user == null || user === "null"
                 ? <GoogleLogin onSuccess={onSuccess} onFailure={onFailure} useOneTap/>
                 : null
             }
@@ -97,7 +100,7 @@ function LoginComponent({loggedIn, setLoggedIn, setUser}) {
                 ? <MDBBtn onClick={signUp}>Signup</MDBBtn>
                 : null
             }
-            {loggedIn
+            {user != null && user !== "null"
                 ? <MDBBtn color="danger" outline onClick={clickLogOut}>Logout</MDBBtn>
                 : null
             }

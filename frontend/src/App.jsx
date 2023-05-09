@@ -1,26 +1,29 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UserProfile from "./UserProfile";
 import Layout from "./routes/Layout";
-import Home from "./routes/Home";
 import ErrorPage from "./routes/ErrorPage";
+import Landing from "./routes/Landing";
 
 function App() {
 
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState(null);
+    const userLoggedIn = sessionStorage.getItem("user") !== null && sessionStorage.getItem("user") !== "null";
 
-    return (<BrowserRouter>
-        <Routes>
-            <Route path="/"
-                   element={<Layout loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} setUser={setUser}/>}>
-                <Route index element={<Home/>}/>
-                <Route path="/userProfile" element={<UserProfile setUser={setUser} user={user}/>}/>
-                <Route path="*" element={<ErrorPage/>}/>
-            </Route>
-        </Routes>
-    </BrowserRouter>);
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout/>}>
+                    <Route index element={<Landing/>}/>
+                    <Route path="/userProfile" element={userLoggedIn
+                        ? <UserProfile/>
+                        : <Landing error={true} snackbarMessage={"You need to log in first"}/>}
+                    />
+                    <Route path="*" element={<ErrorPage/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

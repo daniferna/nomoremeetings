@@ -24,20 +24,26 @@ import {
 } from 'mdb-react-ui-kit';
 import dayjs from "dayjs";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
-export default function UserProfile({user, setUser}) {
+export default function UserProfile() {
 
-    useEffect(() => {
-        //todo controlar user null
-        //todo usar localstorage
-    });
+    const navigate = useNavigate();
+    const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
+
+    const [hoursModal, setHoursModal] = useState(false);
+    const [startWorkingTime, setStartWorkingTime] = useState(dayjs(user?.startWorkingTime, 'HH:mm'));
+    const [endWorkingTime, setEndWorkingTime] = useState(dayjs(user?.endWorkingTime, 'HH:mm'));
+    const [lunchTime, setLunchTime] = useState(dayjs(user?.lunchTime, 'HH:mm'));
 
     const backendHost = process.env.REACT_APP_BACKEND_HOST;
 
-    const [hoursModal, setHoursModal] = useState(false);
-    const [startWorkingTime, setStartWorkingTime] = useState(dayjs(user.startWorkingTime, 'HH:mm'));
-    const [endWorkingTime, setEndWorkingTime] = useState(dayjs(user.endWorkingTime, 'HH:mm'));
-    const [lunchTime, setLunchTime] = useState(dayjs(user.lunchTime, 'HH:mm'));
+    useEffect(() => {
+        setUser(JSON.parse(sessionStorage.getItem("user")))
+        if (user === null || user === "null") {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
     const toggleModalHours = () => setHoursModal(!hoursModal);
 
@@ -50,12 +56,12 @@ export default function UserProfile({user, setUser}) {
             {
                 auth: {
                     username: null,
-                    password: user.idToken
+                    password: user?.idToken
                 }
             })
             .then(res => {
                 let updatedUser = res.data;
-                updatedUser.idToken = user.idToken;
+                updatedUser.idToken = user?.idToken;
                 setUser(updatedUser);
             })
         toggleModalHours();
@@ -134,14 +140,14 @@ export default function UserProfile({user, setUser}) {
                         <MDBCard className="mb-4">
                             <MDBCardBody className="text-center">
                                 <MDBCardImage
-                                    src={user.urlPhoto}
+                                    src={user?.urlPhoto}
                                     referrerPolicy={"no-referrer"}
                                     alt="user profile image"
                                     className="rounded-circle"
                                     style={{width: '150px'}}
                                     fluid/>
-                                <p className="my-3">{user.name}</p>
-                                <p className="text-muted mb-4">{user.startWorkingTime} - {user.endWorkingTime}</p>
+                                <p className="my-3">{user?.name}</p>
+                                <p className="text-muted mb-4">{user?.startWorkingTime} - {user?.endWorkingTime}</p>
                                 <div className="d-flex justify-content-center mb-2">
                                     <MDBBtn onClick={toggleModalHours} rounded color="primary">Edit working
                                         hours</MDBBtn>
@@ -191,7 +197,7 @@ export default function UserProfile({user, setUser}) {
                                         <MDBCardText>Full Name</MDBCardText>
                                     </MDBCol>
                                     <MDBCol end>
-                                        <MDBCardText className="text-muted">{user.name}</MDBCardText>
+                                        <MDBCardText className="text-muted">{user?.name}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
                                 <hr/>
@@ -200,7 +206,7 @@ export default function UserProfile({user, setUser}) {
                                         <MDBCardText>Email</MDBCardText>
                                     </MDBCol>
                                     <MDBCol end>
-                                        <MDBCardText className="text-muted">{user.email}</MDBCardText>
+                                        <MDBCardText className="text-muted">{user?.email}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
                                 <hr/>
@@ -225,7 +231,7 @@ export default function UserProfile({user, setUser}) {
                                         </MDBCol>
                                         <MDBCol end>
                                             <MDBCardText className="text-muted">
-                                                {user.startWorkingTime}
+                                                {user?.startWorkingTime}
                                             </MDBCardText>
                                         </MDBCol>
                                     </MDBRow>
@@ -236,7 +242,7 @@ export default function UserProfile({user, setUser}) {
                                         </MDBCol>
                                         <MDBCol end>
                                             <MDBCardText className="text-muted">
-                                                {user.lunchTime}
+                                                {user?.lunchTime}
                                             </MDBCardText>
                                         </MDBCol>
                                     </MDBRow>
@@ -247,7 +253,7 @@ export default function UserProfile({user, setUser}) {
                                         </MDBCol>
                                         <MDBCol end>
                                             <MDBCardText className="text-muted">
-                                                {user.endWorkingTime}
+                                                {user?.endWorkingTime}
                                             </MDBCardText>
                                         </MDBCol>
                                     </MDBRow>

@@ -1,10 +1,6 @@
 import {
     MDBCollapse,
     MDBContainer,
-    MDBDropdown,
-    MDBDropdownItem,
-    MDBDropdownMenu,
-    MDBDropdownToggle,
     MDBIcon,
     MDBNavbar,
     MDBNavbarBrand,
@@ -16,14 +12,14 @@ import {
 import LoginComponent from "./LoginComponent";
 import {useState} from "react";
 
-function AppMDBNavbar({loggedIn, setLoggedIn, setUser}) {
+function AppMDBNavbar() {
 
     const [showBasic, setShowBasic] = useState(false);
 
     return (
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
-                <MDBNavbarBrand href='#'>
+                <MDBNavbarBrand href="/">
                     <img src="/logoNoMoreMeetings.svg" loading={"lazy"} height={30}></img>
                     NoMoreMeetings
                 </MDBNavbarBrand>
@@ -40,28 +36,15 @@ function AppMDBNavbar({loggedIn, setLoggedIn, setUser}) {
                 <MDBCollapse navbar show={showBasic}>
                     <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
-                            <MDBNavbarLink active aria-current='page' href='#'>
+                            <MDBNavbarLink aria-current='page' href='/'>
                                 Home
                             </MDBNavbarLink>
                         </MDBNavbarItem>
                         <MDBNavbarItem>
-                            <MDBNavbarLink href='#'>Link</MDBNavbarLink>
-                        </MDBNavbarItem>
-
-                        <MDBNavbarItem>
-                            <MDBDropdown>
-                                <MDBDropdownToggle tag='a' className='nav-link' role='button'>
-                                    Dropdown
-                                </MDBDropdownToggle>
-                                <MDBDropdownMenu>
-                                    <MDBDropdownItem link>Action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Another action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Something else here</MDBDropdownItem>
-                                </MDBDropdownMenu>
-                            </MDBDropdown>
+                            <MDBNavbarLink href='userProfile'>User profile</MDBNavbarLink>
                         </MDBNavbarItem>
                     </MDBNavbarNav>
-                    <LoginComponent loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser}/>
+                    <LoginComponent/>
                 </MDBCollapse>
             </MDBContainer>
         </MDBNavbar>
