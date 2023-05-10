@@ -3,6 +3,7 @@ import axios from "axios";
 import {GoogleLogin, useGoogleLogin} from "@react-oauth/google";
 import {MDBBtn} from "mdb-react-ui-kit";
 import {useNavigate} from "react-router-dom";
+import {Alert, Snackbar} from "@mui/material";
 
 function LoginComponent() {
 
@@ -21,6 +22,9 @@ function LoginComponent() {
     }
 
     useEffect(() => {
+        if (needSignUp && postSignUpObject === null) {
+            signUp();
+        }
         if (postSignUpObject !== null && idToken !== null && needSignUp === true) {
             console.log("Sending post-signup data to backend");
             axios.post(backendHost + '/auth/signup',
@@ -92,17 +96,27 @@ function LoginComponent() {
 
     return (
         <div>
-            {user == null || user === "null"
-                ? <GoogleLogin onSuccess={onSuccess} onFailure={onFailure} useOneTap/>
-                : null
+            {
+                (user == null || user === "null") && !needSignUp
+                    ? <GoogleLogin onSuccess={onSuccess} onFailure={onFailure} useOneTap/>
+                    : null
             }
-            {needSignUp
-                ? <MDBBtn onClick={signUp}>Signup</MDBBtn>
-                : null
+            {
+                needSignUp ?
+                    <>
+                        <Snackbar open={needSignUp} anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}>
+                            <Alert severity='info'>
+                                You need to sign up first
+                            </Alert>
+                        </Snackbar>
+                        <MDBBtn onClick={signUp}>Signup</MDBBtn>
+                    </>
+                    : null
             }
-            {user != null && user !== "null"
-                ? <MDBBtn color="danger" outline onClick={clickLogOut}>Logout</MDBBtn>
-                : null
+            {
+                user != null && user !== "null"
+                    ? <MDBBtn color="danger" outline onClick={clickLogOut}>Logout</MDBBtn>
+                    : null
             }
         </div>
     );

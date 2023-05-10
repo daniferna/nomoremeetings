@@ -39,7 +39,6 @@ export default function UserProfile() {
     const backendHost = process.env.REACT_APP_BACKEND_HOST;
 
     useEffect(() => {
-        setUser(JSON.parse(sessionStorage.getItem("user")))
         if (user === null || user === "null") {
             navigate("/");
         }
