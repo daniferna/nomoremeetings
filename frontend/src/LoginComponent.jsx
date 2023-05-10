@@ -43,11 +43,12 @@ function LoginComponent() {
                     let userWithIdToken = res.data;
                     userWithIdToken.idToken = idToken;
                     setUserSessionStorage(userWithIdToken)
+                    navigate("/userProfile");
                 }).catch((err) => {
                 console.log(err)
             });
         }
-    }, [postSignUpObject, idToken, needSignUp, backendHost]);
+    });
 
     const signUp = useGoogleLogin({
         onSuccess: (response) => {
@@ -64,6 +65,7 @@ function LoginComponent() {
     function clickLogOut() {
         console.log("Logging out");
         setUserSessionStorage(null);
+        navigate("/");
     }
 
     async function onSuccess(code) {
