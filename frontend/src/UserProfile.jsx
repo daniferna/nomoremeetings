@@ -11,6 +11,7 @@ import {
     MDBCol,
     MDBContainer,
     MDBIcon,
+    MDBInput,
     MDBListGroup,
     MDBListGroupItem,
     MDBModal,
@@ -34,7 +35,9 @@ export default function UserProfile() {
     const [hoursModal, setHoursModal] = useState(false);
     const [startWorkingTime, setStartWorkingTime] = useState(dayjs(user?.startWorkingTime, 'HH:mm'));
     const [endWorkingTime, setEndWorkingTime] = useState(dayjs(user?.endWorkingTime, 'HH:mm'));
-    const [lunchTime, setLunchTime] = useState(dayjs(user?.lunchTime, 'HH:mm'));
+    const [startLunchTime, setStartLunchTime] = useState(dayjs(user?.startLunchTime, 'HH:mm'));
+    const [endLunchTime, setEndLunchTime] = useState(dayjs(user?.endLunchTime, 'HH:mm'));
+    const [timeBetweenMeetings, setTimeBetweenMeetings] = useState(user?.timeBetweenMeetings);
 
     const backendHost = process.env.REACT_APP_BACKEND_HOST;
 
@@ -44,13 +47,16 @@ export default function UserProfile() {
         }
     }, [user, navigate]);
 
-    const toggleModalHours = () => setHoursModal(!hoursModal);
+    const openModalHours = () => setHoursModal(true);
+    const closeModalHours = () => setHoursModal(false);
 
     function saveNewTimes() {
         axios.patch(backendHost + '/user', {
                 startWorkingTime: startWorkingTime.format('HH:mm'),
                 endWorkingTime: endWorkingTime.format('HH:mm'),
-                lunchTime: lunchTime.format('HH:mm')
+                startLunchTime: startLunchTime.format('HH:mm'),
+                endLunchTime: endLunchTime.format('HH:mm'),
+                timeBetweenMeetings: timeBetweenMeetings
             },
             {
                 auth: {
@@ -62,18 +68,19 @@ export default function UserProfile() {
                 let updatedUser = res.data;
                 updatedUser.idToken = user?.idToken;
                 setUser(updatedUser);
+                sessionStorage.setItem("user", JSON.stringify(updatedUser));
             })
-        toggleModalHours();
+        closeModalHours();
     }
 
     return (
-        <section style={{backgroundColor: '#eee'}}>
+        <section style={{backgroundColor: 'rgba(238,238,238,0.5)'}}>
             <MDBModal show={hoursModal} setShow={setHoursModal} tabIndex='-1'>
                 <MDBModalDialog>
                     <MDBModalContent>
                         <MDBModalHeader>
                             <MDBModalTitle>Edit working hours</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={toggleModalHours}></MDBBtn>
+                            <MDBBtn className='btn-close' color='none' onClick={closeModalHours}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
                             <MDBContainer>
@@ -101,15 +108,23 @@ export default function UserProfile() {
                                         <TimePicker label={'Start lunch time'}
                                                     ampm={false}
                                                     minutesStep={5}
-                                                    defaultValue={lunchTime}
-                                                    onChange={(newTime) => setLunchTime(newTime)}
+                                                    defaultValue={startLunchTime}
+                                                    onChange={(newTime) => setStartLunchTime(newTime)}
+                                        />
+                                    </MDBCol>
+                                    <MDBCol>
+                                        <TimePicker label={'End lunch time'}
+                                                    ampm={false}
+                                                    minutesStep={5}
+                                                    defaultValue={endLunchTime}
+                                                    onChange={(newTime) => setEndLunchTime(newTime)}
                                         />
                                     </MDBCol>
                                 </MDBRow>
                             </MDBContainer>
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn color='danger' onClick={toggleModalHours}>
+                            <MDBBtn color='danger' onClick={closeModalHours}>
                                 Close
                             </MDBBtn>
                             <MDBBtn onClick={saveNewTimes}>
@@ -124,16 +139,12 @@ export default function UserProfile() {
                     <MDBCol>
                         <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
                             <MDBBreadcrumbItem>
-                                <a href='#'>Home</a>
-                            </MDBBreadcrumbItem>
-                            <MDBBreadcrumbItem>
-                                <a href="#">User</a>
+                                <a href='/'>Home</a>
                             </MDBBreadcrumbItem>
                             <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
                         </MDBBreadcrumb>
                     </MDBCol>
                 </MDBRow>
-
                 <MDBRow>
                     <MDBCol lg="4">
                         <MDBCard className="mb-4">
@@ -148,12 +159,11 @@ export default function UserProfile() {
                                 <p className="my-3">{user?.name}</p>
                                 <p className="text-muted mb-4">{user?.startWorkingTime} - {user?.endWorkingTime}</p>
                                 <div className="d-flex justify-content-center mb-2">
-                                    <MDBBtn onClick={toggleModalHours} rounded color="primary">Edit working
+                                    <MDBBtn onClick={openModalHours} rounded color="primary">Edit working
                                         hours</MDBBtn>
                                 </div>
                             </MDBCardBody>
                         </MDBCard>
-
                         <MDBCard className="mb-4 mb-lg-0">
                             <MDBCardBody className="p-0">
                                 <MDBListGroup flush className="rounded-3">
@@ -208,15 +218,6 @@ export default function UserProfile() {
                                         <MDBCardText className="text-muted">{user?.email}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
-                                <hr/>
-                                <MDBRow>
-                                    <MDBCol start>
-                                        <MDBCardText>Other row</MDBCardText>
-                                    </MDBCol>
-                                    <MDBCol end>
-                                        <MDBCardText className="text-muted">¿?</MDBCardText>
-                                    </MDBCol>
-                                </MDBRow>
                             </MDBCardBody>
                         </MDBCard>
                         <MDBCol>
@@ -241,7 +242,7 @@ export default function UserProfile() {
                                         </MDBCol>
                                         <MDBCol end>
                                             <MDBCardText className="text-muted">
-                                                {user?.lunchTime}
+                                                {user?.startLunchTime} - {user?.endLunchTime}
                                             </MDBCardText>
                                         </MDBCol>
                                     </MDBRow>
@@ -254,6 +255,26 @@ export default function UserProfile() {
                                             <MDBCardText className="text-muted">
                                                 {user?.endWorkingTime}
                                             </MDBCardText>
+                                        </MDBCol>
+                                    </MDBRow>
+                                </MDBCardBody>
+                            </MDBCard>
+                            <MDBCard className="mb-4">
+                                <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"> Configuration </MDBBreadcrumb>
+                                <MDBCardBody>
+                                    <MDBRow center>
+                                        <MDBCol start size={6}>
+                                            <MDBCardText style={{paddingTop: '4px'}}>Time between
+                                                meetings</MDBCardText>
+                                        </MDBCol>
+                                        <MDBCol size={4}>
+                                            <MDBInput label="Minutes" type='number'
+                                                      onChange={newTime => setTimeBetweenMeetings(newTime.target.value)}
+                                                      defaultValue={timeBetweenMeetings}/>
+                                        </MDBCol>
+                                        <MDBCol size={2}>
+                                            <MDBBtn color='secondary' rounded
+                                                    onClick={saveNewTimes}>Save</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBCardBody>

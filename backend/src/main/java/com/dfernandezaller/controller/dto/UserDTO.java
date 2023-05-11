@@ -11,5 +11,7 @@ import java.time.LocalTime;
 public record UserDTO(String email, String name, String urlPhoto,
                       @JsonFormat(pattern = "HH:mm") LocalTime startWorkingTime,
                       @JsonFormat(pattern = "HH:mm") LocalTime endWorkingTime,
-                      @JsonFormat(pattern = "HH:mm") LocalTime lunchTime) {
+                      @JsonFormat(pattern = "HH:mm") LocalTime startLunchTime,
+                      @JsonFormat(pattern = "HH:mm") LocalTime endLunchTime,
+                      int timeBetweenMeetings) {
 }

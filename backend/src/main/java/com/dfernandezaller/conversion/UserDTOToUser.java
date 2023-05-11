@@ -18,7 +18,9 @@ public class UserDTOToUser implements TypeConverter<UserDTO, User> {
                 .urlPhoto(userDTO.urlPhoto())
                 .startWorkingTime(userDTO.startWorkingTime())
                 .endWorkingTime(userDTO.endWorkingTime())
-                .lunchTime(userDTO.lunchTime())
+                .startLunchTime(userDTO.startLunchTime())
+                .endLunchTime(userDTO.endLunchTime())
+                .timeBetweenMeetings(userDTO.timeBetweenMeetings())
                 .build()
         );
     }

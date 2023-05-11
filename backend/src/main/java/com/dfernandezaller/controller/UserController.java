@@ -1,6 +1,6 @@
 package com.dfernandezaller.controller;
 
-import com.dfernandezaller.controller.dto.UpdateWorkingHoursRequestDTO;
+import com.dfernandezaller.controller.dto.UpdateUserTimesDTO;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.service.UserService;
 import io.micronaut.http.annotation.Controller;
@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @Patch
-    public UserDTO updateUserWorkingHours(Authentication authentication, UpdateWorkingHoursRequestDTO requestDTO) {
+    public UserDTO updateUserWorkingHours(Authentication authentication, UpdateUserTimesDTO requestDTO) {
         return userService.updateUser(authentication.getName(), requestDTO).orElseThrow();
     }
 

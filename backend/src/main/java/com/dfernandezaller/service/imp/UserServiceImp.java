@@ -1,6 +1,6 @@
 package com.dfernandezaller.service.imp;
 
-import com.dfernandezaller.controller.dto.UpdateWorkingHoursRequestDTO;
+import com.dfernandezaller.controller.dto.UpdateUserTimesDTO;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.repository.UserRepository;
 import com.dfernandezaller.service.UserService;
@@ -28,12 +28,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> updateUser(String email, UpdateWorkingHoursRequestDTO requestDTO) {
+    public Optional<UserDTO> updateUser(String email, UpdateUserTimesDTO requestDTO) {
         var userDb = userRepository.findById(email).orElseThrow();
         var updatedUser = userDb.toBuilder()
                 .startWorkingTime(requestDTO.startWorkingTime())
                 .endWorkingTime(requestDTO.endWorkingTime())
-                .lunchTime(requestDTO.lunchTime())
+                .startLunchTime(requestDTO.startLunchTime())
+                .endLunchTime(requestDTO.endLunchTime())
+                .timeBetweenMeetings(requestDTO.timeBetweenMeetings().orElse(userDb.getTimeBetweenMeetings()))
                 .build();
         return conversionService.convert(userRepository.update(updatedUser), UserDTO.class);
     }
