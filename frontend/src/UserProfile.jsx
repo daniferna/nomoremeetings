@@ -26,6 +26,7 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Alert, Snackbar} from "@mui/material";
 
 export default function UserProfile() {
 
@@ -33,6 +34,8 @@ export default function UserProfile() {
     const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
 
     const [hoursModal, setHoursModal] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
     const [startWorkingTime, setStartWorkingTime] = useState(dayjs(user?.startWorkingTime, 'HH:mm'));
     const [endWorkingTime, setEndWorkingTime] = useState(dayjs(user?.endWorkingTime, 'HH:mm'));
     const [startLunchTime, setStartLunchTime] = useState(dayjs(user?.startLunchTime, 'HH:mm'));
@@ -69,12 +72,18 @@ export default function UserProfile() {
                 updatedUser.idToken = user?.idToken;
                 setUser(updatedUser);
                 sessionStorage.setItem("user", JSON.stringify(updatedUser));
+                setSnackbarOpen(true);
             })
         closeModalHours();
     }
 
     return (
         <section style={{backgroundColor: 'rgba(238,238,238,0.5)'}}>
+            <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
+                <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{width: '100%'}}>
+                    Changes saved successfully!
+                </Alert>
+            </Snackbar>
             <MDBModal show={hoursModal} setShow={setHoursModal} tabIndex='-1'>
                 <MDBModalDialog>
                     <MDBModalContent>
@@ -263,18 +272,20 @@ export default function UserProfile() {
                                 <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"> Configuration </MDBBreadcrumb>
                                 <MDBCardBody>
                                     <MDBRow center>
-                                        <MDBCol start size={6}>
-                                            <MDBCardText style={{paddingTop: '4px'}}>Time between
-                                                meetings</MDBCardText>
+                                        <MDBCol md={6} style={{marginBottom: '10px'}}>
+                                            <MDBCardText style={{paddingTop: '4px'}}>
+                                                Time between meetings
+                                            </MDBCardText>
                                         </MDBCol>
-                                        <MDBCol size={4}>
+                                        <MDBCol>
                                             <MDBInput label="Minutes" type='number'
                                                       onChange={newTime => setTimeBetweenMeetings(newTime.target.value)}
                                                       defaultValue={timeBetweenMeetings}/>
                                         </MDBCol>
-                                        <MDBCol size={2}>
-                                            <MDBBtn color='secondary' rounded
-                                                    onClick={saveNewTimes}>Save</MDBBtn>
+                                        <MDBCol id="saveButton">
+                                            <MDBBtn color='secondary' rounded onClick={saveNewTimes}>
+                                                Save
+                                            </MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBCardBody>

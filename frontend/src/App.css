@@ -7,6 +7,10 @@ body {
     background: inherit !important;
 }
 
+#saveButton {
+    align-self: center !important;
+}
+
 html {
     background-image: url("images/backgroundCurves.png");
     background-color: rgb(241, 241, 241);
