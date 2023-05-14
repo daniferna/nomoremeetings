@@ -1,0 +1,10 @@
+micronaut:
+  server:
+    cors:
+      enabled: true
+datasources:
+  default:
+    url: jdbc:tc:postgresql://localhost/test
+    db-type: postgres
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    dialect: POSTGRES

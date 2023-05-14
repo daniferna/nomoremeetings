@@ -85,7 +85,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
                 new GoogleCredential(key, value.getAccessToken(), value.getExpirationTimeMilliseconds(), value.getRefreshToken(), now(), now())
         );
         googleCredential.apply(value);
-        repository.save(googleCredential);
+        repository.update(googleCredential);
         return this;
     }
 
