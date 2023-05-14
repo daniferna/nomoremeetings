@@ -37,6 +37,8 @@ public class User {
     LocalTime endLunchTime = LocalTime.of(14, 0);
     @Builder.Default
     int timeBetweenMeetings = 15;
+    @Builder.Default
+    String calendarName = "primary";
 
 }
 

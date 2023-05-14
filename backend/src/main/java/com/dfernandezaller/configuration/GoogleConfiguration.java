@@ -10,5 +10,5 @@ import lombok.Data;
 public class GoogleConfiguration {
     private String clientId;
     private String clientSecret;
-
+    private String applicationName;
 }

@@ -22,6 +22,7 @@ public class UserToUserDTO implements TypeConverter<User, UserDTO> {
                 .startLunchTime(user.getStartLunchTime())
                 .endLunchTime(user.getEndLunchTime())
                 .timeBetweenMeetings(user.getTimeBetweenMeetings())
+                .calendarName(user.getCalendarName())
                 .build()
         );
     }
