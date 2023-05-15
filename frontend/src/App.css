@@ -8,7 +8,7 @@ body {
 }
 
 #saveButton {
-    align-self: center !important;
+    padding-top: 10px;
 }
 
 html {

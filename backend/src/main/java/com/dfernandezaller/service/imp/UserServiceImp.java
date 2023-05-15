@@ -2,8 +2,10 @@ package com.dfernandezaller.service.imp;
 
 import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
 import com.dfernandezaller.configuration.GoogleConfiguration;
-import com.dfernandezaller.controller.dto.UpdateUserTimesDTO;
+import com.dfernandezaller.controller.dto.CalendarDTO;
+import com.dfernandezaller.controller.dto.UpdateUserDTO;
 import com.dfernandezaller.controller.dto.UserDTO;
+import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.repository.UserRepository;
 import com.dfernandezaller.service.UserService;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -11,12 +13,15 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.model.Calendar;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import io.micronaut.core.convert.ConversionService;
 import jakarta.inject.Singleton;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Optional;
 
 @Singleton
@@ -43,7 +48,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> updateUser(String email, UpdateUserTimesDTO requestDTO) {
+    public Optional<UserDTO> updateUser(String email, UpdateUserDTO requestDTO) {
         var userDb = userRepository.findById(email).orElseThrow();
         var updatedUser = userDb.toBuilder()
                 .startWorkingTime(requestDTO.startWorkingTime())
@@ -51,27 +56,58 @@ public class UserServiceImp implements UserService {
                 .startLunchTime(requestDTO.startLunchTime())
                 .endLunchTime(requestDTO.endLunchTime())
                 .timeBetweenMeetings(requestDTO.timeBetweenMeetings().orElse(userDb.getTimeBetweenMeetings()))
+                .calendarId(requestDTO.calendarId().orElse(userDb.getCalendarId()))
                 .build();
         return conversionService.convert(userRepository.update(updatedUser), UserDTO.class);
     }
 
     @Override
-    public Calendar getCalendar(String email) throws GeneralSecurityException, IOException {
-        final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-        var calendarService = initializeCalendarService(httpTransport);
-        var calendarName = getUser(email).orElseThrow().calendarName();
+    // TODO: 15/05/2023 WIP
+    public Calendar getCalendar(String email) throws IOException {
+        var calendarService = initializeCalendarService("danixe.ferna@hotmail.com");
+        var calendarName = getUser(email).orElseThrow().calendarId();
 
         var calendar = calendarService.calendars().get(calendarName).execute();
-        System.out.println(calendar);
 
         return calendar;
     }
 
-    private com.google.api.services.calendar.Calendar initializeCalendarService(NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        return new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-                authorizationCodeFlowFactory.getAuthorizationCodeFlow().loadCredential("danixe.ferna@gmail.com"))
-                .setApplicationName(googleConfiguration.getApplicationName())
-                .build();
+    @Override
+    public List<CalendarDTO> getUserCalendars(String name) {
+        final var calendarService = initializeCalendarService(name);
+        final var calendars = getRawCalendars(calendarService);
+        return calendars.getItems().stream()
+                .filter(this::isValidCalendarEntry)
+                .map(calendarListEntry -> conversionService.convert(calendarListEntry, CalendarDTO.class))
+                .map(Optional::orElseThrow)
+                .toList();
+    }
+
+    private boolean isValidCalendarEntry(CalendarListEntry calendarListEntry) {
+        return !(Boolean.TRUE.equals(calendarListEntry.getDeleted()) || Boolean.TRUE.equals(calendarListEntry.getHidden()));
+    }
+
+    private com.google.api.services.calendar.Calendar initializeCalendarService(String userId) {
+        final NetHttpTransport httpTransport;
+        try {
+            httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+            return new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY,
+                    authorizationCodeFlowFactory.getAuthorizationCodeFlow().loadCredential(userId))
+                    .setApplicationName(googleConfiguration.getApplicationName())
+                    .build();
+        } catch (IOException e) {
+            throw new BusinessException("There has been a problem connecting with calendar provider", e);
+        } catch (GeneralSecurityException e) {
+            throw new BusinessException("There is no sufficient permissions to retrieve calendar service", e);
+        }
+    }
+
+    private CalendarList getRawCalendars(com.google.api.services.calendar.Calendar calendarService) {
+        try {
+            return calendarService.calendarList().list().execute();
+        } catch (IOException e) {
+            throw new BusinessException("There has been a problem retrieving user calendars", e);
+        }
     }
 
 }

@@ -26,7 +26,7 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Alert, Snackbar} from "@mui/material";
+import {Alert, FormControl, MenuItem, Select, Snackbar} from "@mui/material";
 
 export default function UserProfile() {
 
@@ -42,24 +42,55 @@ export default function UserProfile() {
     const [endLunchTime, setEndLunchTime] = useState(dayjs(user?.endLunchTime, 'HH:mm'));
     const [timeBetweenMeetings, setTimeBetweenMeetings] = useState(user?.timeBetweenMeetings);
 
+    const [userCalendars, setUserCalendars] = useState([]);
+    const [selectedCalendar, setSelectedCalendar] = useState(null);
+
     const backendHost = process.env.REACT_APP_BACKEND_HOST;
 
     useEffect(() => {
         if (user === null || user === "null") {
             navigate("/");
+        } else if (userCalendars.length === 0) {
+            loadUserCalendars();
         }
     }, [user, navigate]);
+
+    useEffect(() => {
+        if (user !== null && user !== "null") {
+            if (userCalendars.length > 0 && user.calendarId === "primary") {
+                setSelectedCalendar(userCalendars.find(calendar => calendar.isPrimary))
+            } else if (userCalendars.length > 0 && user.calendarId !== "primary") {
+                setSelectedCalendar(userCalendars.find(calendar => calendar.id === user.calendarId));
+            }
+        }
+    }, [userCalendars, user]);
+
+    function loadUserCalendars() {
+        console.log("Asking backend for user calendars");
+        axios.get(backendHost + '/user/calendars', {
+            auth: {
+                username: null,
+                password: user?.idToken
+            }
+        }).then((res) => {
+            console.log("User calendars: " + res.data);
+            setUserCalendars(res.data);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
     const openModalHours = () => setHoursModal(true);
     const closeModalHours = () => setHoursModal(false);
 
-    function saveNewTimes() {
+    function saveConfigurationChanges() {
         axios.patch(backendHost + '/user', {
                 startWorkingTime: startWorkingTime.format('HH:mm'),
                 endWorkingTime: endWorkingTime.format('HH:mm'),
                 startLunchTime: startLunchTime.format('HH:mm'),
                 endLunchTime: endLunchTime.format('HH:mm'),
-                timeBetweenMeetings: timeBetweenMeetings
+                timeBetweenMeetings: timeBetweenMeetings,
+                calendarId: selectedCalendar.id
             },
             {
                 auth: {
@@ -79,7 +110,7 @@ export default function UserProfile() {
 
     return (
         <section style={{backgroundColor: 'rgba(238,238,238,0.5)'}}>
-            <Snackbar open={snackbarOpen} autoHideDuration={5000} onClose={() => setSnackbarOpen(false)}>
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{width: '100%'}}>
                     Changes saved successfully!
                 </Alert>
@@ -136,7 +167,7 @@ export default function UserProfile() {
                             <MDBBtn color='danger' onClick={closeModalHours}>
                                 Close
                             </MDBBtn>
-                            <MDBBtn onClick={saveNewTimes}>
+                            <MDBBtn onClick={saveConfigurationChanges}>
                                 Save changes
                             </MDBBtn>
                         </MDBModalFooter>
@@ -272,19 +303,47 @@ export default function UserProfile() {
                                 <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"> Configuration </MDBBreadcrumb>
                                 <MDBCardBody>
                                     <MDBRow center>
-                                        <MDBCol md={6} style={{marginBottom: '10px'}}>
+                                        <MDBCol style={{marginBottom: '10px'}}>
                                             <MDBCardText style={{paddingTop: '4px'}}>
                                                 Time between meetings
                                             </MDBCardText>
                                         </MDBCol>
+                                        <MDBCol size={1}/>
                                         <MDBCol>
                                             <MDBInput label="Minutes" type='number'
                                                       onChange={newTime => setTimeBetweenMeetings(newTime.target.value)}
                                                       defaultValue={timeBetweenMeetings}/>
                                         </MDBCol>
+                                        <MDBCol size={1}/>
+                                    </MDBRow>
+                                    <MDBRow center>
+                                        <MDBCol center>
+                                            <MDBCardText style={{paddingTop: '4px'}}>
+                                                Selected calendar
+                                            </MDBCardText>
+                                        </MDBCol>
+                                        <MDBCol size={1}/>
+                                        <MDBCol>
+                                            <FormControl fullWidth margin="dense">
+                                                <Select sx={{minHeight: '30px', height: '37px'}}
+                                                        id="selector-calendar"
+                                                        value={selectedCalendar}
+                                                        onChange={(e) => setSelectedCalendar(e.target.value)}
+                                                >
+                                                    {userCalendars.map((calendar) => (
+                                                        <MenuItem key={calendar.id} value={calendar}>
+                                                            {calendar.name}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </MDBCol>
+                                        <MDBCol size={1}/>
+                                    </MDBRow>
+                                    <MDBRow>
                                         <MDBCol id="saveButton">
-                                            <MDBBtn color='secondary' rounded onClick={saveNewTimes}>
-                                                Save
+                                            <MDBBtn color='secondary' rounded onClick={saveConfigurationChanges}>
+                                                Save changes
                                             </MDBBtn>
                                         </MDBCol>
                                     </MDBRow>

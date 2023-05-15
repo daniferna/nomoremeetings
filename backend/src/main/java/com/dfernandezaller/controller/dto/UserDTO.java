@@ -14,5 +14,5 @@ public record UserDTO(String email, String name, String urlPhoto,
                       @JsonFormat(pattern = "HH:mm") LocalTime startLunchTime,
                       @JsonFormat(pattern = "HH:mm") LocalTime endLunchTime,
                       int timeBetweenMeetings,
-                      String calendarName) {
+                      String calendarId) {
 }

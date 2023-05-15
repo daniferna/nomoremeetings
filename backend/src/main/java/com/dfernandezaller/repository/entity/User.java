@@ -38,7 +38,7 @@ public class User {
     @Builder.Default
     int timeBetweenMeetings = 15;
     @Builder.Default
-    String calendarName = "primary";
+    String calendarId = "primary";
 
 }
 
