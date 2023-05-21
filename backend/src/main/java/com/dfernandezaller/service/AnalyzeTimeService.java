@@ -1,7 +1,9 @@
 package com.dfernandezaller.service;
 
+import com.dfernandezaller.model.TimeAnalysisResults;
+
 public interface AnalyzeTimeService {
 
-    double getTimeSpentInMeetings(String userEmail);
+    TimeAnalysisResults getTimeSpentInMeetings(String userEmail);
 
 }

@@ -1,27 +1,27 @@
 package com.dfernandezaller.controller;
 
-import com.dfernandezaller.service.imp.CalendarQuickstart;
+import com.dfernandezaller.model.TimeAnalysisResults;
+import com.dfernandezaller.service.AnalyzeTimeService;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
 @Controller("/test")
+@Requires(env = "dev")
 @Secured(SecurityRule.IS_ANONYMOUS)
 public class TestController {
 
-    private final CalendarQuickstart calendarQuickstart;
+    private final AnalyzeTimeService analyzeTimeService;
 
-    public TestController(CalendarQuickstart calendarQuickstart) {
-        this.calendarQuickstart = calendarQuickstart;
+    public TestController(AnalyzeTimeService analyzeTimeService) {
+        this.analyzeTimeService = analyzeTimeService;
     }
 
     @Get
-    public void getUser() throws GeneralSecurityException, IOException {
-        calendarQuickstart.getEvents();
+    public TimeAnalysisResults getTimeSpentInMeetings() {
+        return analyzeTimeService.getTimeSpentInMeetings("danixe.ferna@gmail.com");
     }
 
 }

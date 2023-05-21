@@ -93,6 +93,10 @@ micronaut {
     }
 }
 
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
+
 shadowJar {
     archiveFileName="app.jar"
     mergeServiceFiles()
