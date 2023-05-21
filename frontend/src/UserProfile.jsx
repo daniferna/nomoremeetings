@@ -91,7 +91,8 @@ export default function UserProfile() {
                 startLunchTime: startLunchTime.format('HH:mm'),
                 endLunchTime: endLunchTime.format('HH:mm'),
                 timeBetweenMeetings: timeBetweenMeetings,
-                calendarId: selectedCalendar.id
+                calendarId: selectedCalendar.id,
+                daysToAnalyze: daysToAnalyze
             },
             {
                 auth: {
