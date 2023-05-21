@@ -26,7 +26,7 @@ import {
 import dayjs from "dayjs";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Alert, FormControl, MenuItem, Select, Snackbar} from "@mui/material";
+import {Alert, CircularProgress, FormControl, MenuItem, Select, Snackbar} from "@mui/material";
 
 export default function UserProfile() {
 
@@ -310,7 +310,7 @@ export default function UserProfile() {
                                             </MDBCardText>
                                         </MDBCol>
                                         <MDBCol>
-                                            <MDBInput label="Minutes" type='number'
+                                            <MDBInput label="Minutes" type='number' id="numberSelector"
                                                       onChange={newTime => setTimeBetweenMeetings(newTime.target.value)}
                                                       defaultValue={timeBetweenMeetings}/>
                                         </MDBCol>
@@ -323,7 +323,7 @@ export default function UserProfile() {
                                             </MDBCardText>
                                         </MDBCol>
                                         <MDBCol>
-                                            <MDBInput label="Days" type='number'
+                                            <MDBInput label="Days" type='number' id="numberSelector"
                                                       onChange={newTime => setDaysToAnalyze(newTime.target.value)}
                                                       defaultValue={daysToAnalyze}/>
                                         </MDBCol>
@@ -337,17 +337,19 @@ export default function UserProfile() {
                                         </MDBCol>
                                         <MDBCol>
                                             <FormControl fullWidth margin="dense">
-                                                <Select sx={{minHeight: '30px', height: '37px'}}
-                                                        id="selector-calendar"
-                                                        value={selectedCalendar}
-                                                        onChange={(e) => setSelectedCalendar(e.target.value)}
-                                                >
-                                                    {userCalendars.map((calendar) => (
-                                                        <MenuItem key={calendar.id} value={calendar}>
-                                                            {calendar.name}
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
+                                                {userCalendars.length > 0 ?
+                                                    <Select sx={{minHeight: '30px', height: '37px'}}
+                                                            id="selector-calendar"
+                                                            value={selectedCalendar}
+                                                            onChange={(e) => setSelectedCalendar(e.target.value)}
+                                                    >
+                                                        {userCalendars.map((calendar) => (
+                                                            <MenuItem key={calendar.id} value={calendar}>
+                                                                {calendar.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select> : <CircularProgress sx={{alignSelf: "center"}}/>
+                                                }
                                             </FormControl>
                                         </MDBCol>
                                     </MDBRow>

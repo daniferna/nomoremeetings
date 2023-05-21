@@ -43,6 +43,9 @@ function AppMDBNavbar() {
                         <MDBNavbarItem>
                             <MDBNavbarLink href='userProfile'>User profile</MDBNavbarLink>
                         </MDBNavbarItem>
+                        <MDBNavbarItem>
+                            <MDBNavbarLink href='timeAnalysis'>Time analysis</MDBNavbarLink>
+                        </MDBNavbarItem>
                     </MDBNavbarNav>
                     <LoginComponent/>
                 </MDBCollapse>

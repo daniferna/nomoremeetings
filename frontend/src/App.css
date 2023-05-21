@@ -7,8 +7,15 @@ body {
     background: inherit !important;
 }
 
+#numberSelector {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
 #saveButton {
     padding-top: 10px;
+    margin-top: 10px;
 }
 
 html {
