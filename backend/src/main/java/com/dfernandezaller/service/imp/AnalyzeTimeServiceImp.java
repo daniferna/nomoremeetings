@@ -25,6 +25,7 @@ import java.util.Map;
 public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AnalyzeTimeServiceImp.class);
+    public static final double MINUTES_IN_HOUR = 60.0;
 
     private final UserService userService;
     private final CalendarService calendarService;
@@ -101,7 +102,7 @@ public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
             ooo += dayMinutesDistribution.ooo();
         }
 
-        return new TimeDistribution(busy / 60.0, tentative / 60.0, ooo / 60.0);
+        return new TimeDistribution(busy / MINUTES_IN_HOUR, tentative / MINUTES_IN_HOUR, ooo / MINUTES_IN_HOUR);
     }
 
     private TimeDistribution calculateBusyTentativeOooMinutesForDay(Map<LocalDate, MeetingDay> meetings, LocalDate day, int resolutionMinutes, int workingHours, LocalTime startHour, LocalTime endHour) {
@@ -155,34 +156,48 @@ public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
         }
     }
 
-    private TimeDistribution adjustDayMinutesToWorkingMinutes(int busyDay, int tentativeDay, int oooDay, int workingMinutes, LocalDate day) {
-        if ((busyDay + tentativeDay + oooDay) > workingMinutes) {
+    private TimeDistribution adjustDayMinutesToWorkingMinutes(int busyDay, int tentativeDay, int oooDay,
+                                                              int workingMinutes, LocalDate day) {
+        int totalMinutes = busyDay + tentativeDay + oooDay;
+
+        if (totalMinutes > workingMinutes) {
             LOG.debug("More minutes in meetings (busy: {}, tentative: {}, ooo: {}) than working minutes ({}) on day {}",
                     busyDay, tentativeDay, oooDay, workingMinutes, day);
-            int difference = busyDay + tentativeDay + oooDay - workingMinutes;
-            // Intenta eliminar primero de ooo
-            if (oooDay >= difference) {
-                oooDay -= difference;
-            } else {
-                // Elimina lo posible de ooo
-                int rest = difference - oooDay;
-                oooDay = 0;
-                // Ahora intenta eliminar de tentativo ya que es más posible que consuma tiempo
-                if (tentativeDay >= rest) {
-                    tentativeDay -= rest;
-                } else {
-                    // Elimina lo posible de tentativo
-                    rest -= tentativeDay;
-                    tentativeDay = 0;
-                    // Ahora elimina de ocupado
-                    if (busyDay >= rest) {
-                        busyDay -= rest;
-                    } else {
-                        busyDay = 0;
-                    }
-                }
-            }
+            int difference = totalMinutes - workingMinutes;
+            return subtractMinutesFromMeetings(busyDay, tentativeDay, oooDay, difference);
         }
+
+        return new TimeDistribution(busyDay, tentativeDay, oooDay);
+    }
+
+    private TimeDistribution subtractMinutesFromMeetings(int busyDay, int tentativeDay, int oooDay, int difference) {
+        int remainingDifference = difference;
+
+        // Intenta eliminar primero de ooo
+        if (oooDay >= remainingDifference) {
+            oooDay -= remainingDifference;
+            remainingDifference = 0;
+        } else {
+            remainingDifference -= oooDay;
+            oooDay = 0;
+        }
+
+        // Ahora intenta eliminar de tentativo ya que es más posible que consuma tiempo
+        if (remainingDifference > 0 && tentativeDay >= remainingDifference) {
+            tentativeDay -= remainingDifference;
+            remainingDifference = 0;
+        } else {
+            remainingDifference -= tentativeDay;
+            tentativeDay = 0;
+        }
+
+        // Ahora elimina de ocupado
+        if (remainingDifference > 0 && busyDay >= remainingDifference) {
+            busyDay -= remainingDifference;
+        } else {
+            busyDay = 0;
+        }
+
         return new TimeDistribution(busyDay, tentativeDay, oooDay);
     }
 
