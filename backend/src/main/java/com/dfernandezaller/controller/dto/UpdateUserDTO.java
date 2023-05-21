@@ -12,6 +12,6 @@ public record UpdateUserDTO(@NotNull @JsonFormat(pattern = "HH:mm") LocalTime st
                             @NotNull @JsonFormat(pattern = "HH:mm") LocalTime endWorkingTime,
                             @NotNull @JsonFormat(pattern = "HH:mm") LocalTime startLunchTime,
                             @NotNull @JsonFormat(pattern = "HH:mm") LocalTime endLunchTime,
-                            Optional<Integer> timeBetweenMeetings,
-                            Optional<String> calendarId) {
+                            Optional<Integer> timeBetweenMeetings, Optional<String> calendarId,
+                            Optional<Integer> daysToAnalyze) {
 }

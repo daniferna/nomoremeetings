@@ -41,6 +41,7 @@ export default function UserProfile() {
     const [startLunchTime, setStartLunchTime] = useState(dayjs(user?.startLunchTime, 'HH:mm'));
     const [endLunchTime, setEndLunchTime] = useState(dayjs(user?.endLunchTime, 'HH:mm'));
     const [timeBetweenMeetings, setTimeBetweenMeetings] = useState(user?.timeBetweenMeetings);
+    const [daysToAnalyze, setDaysToAnalyze] = useState(user?.daysToAnalyze);
 
     const [userCalendars, setUserCalendars] = useState([]);
     const [selectedCalendar, setSelectedCalendar] = useState(null);
@@ -308,21 +309,32 @@ export default function UserProfile() {
                                                 Time between meetings
                                             </MDBCardText>
                                         </MDBCol>
-                                        <MDBCol size={1}/>
                                         <MDBCol>
                                             <MDBInput label="Minutes" type='number'
                                                       onChange={newTime => setTimeBetweenMeetings(newTime.target.value)}
                                                       defaultValue={timeBetweenMeetings}/>
                                         </MDBCol>
-                                        <MDBCol size={1}/>
                                     </MDBRow>
+                                    <hr/>
+                                    <MDBRow center>
+                                        <MDBCol style={{marginBottom: '10px'}}>
+                                            <MDBCardText style={{paddingTop: '4px'}}>
+                                                Number of previous days to analyze
+                                            </MDBCardText>
+                                        </MDBCol>
+                                        <MDBCol>
+                                            <MDBInput label="Days" type='number'
+                                                      onChange={newTime => setDaysToAnalyze(newTime.target.value)}
+                                                      defaultValue={daysToAnalyze}/>
+                                        </MDBCol>
+                                    </MDBRow>
+                                    <hr/>
                                     <MDBRow center>
                                         <MDBCol center>
                                             <MDBCardText style={{paddingTop: '4px'}}>
                                                 Selected calendar
                                             </MDBCardText>
                                         </MDBCol>
-                                        <MDBCol size={1}/>
                                         <MDBCol>
                                             <FormControl fullWidth margin="dense">
                                                 <Select sx={{minHeight: '30px', height: '37px'}}
@@ -338,7 +350,6 @@ export default function UserProfile() {
                                                 </Select>
                                             </FormControl>
                                         </MDBCol>
-                                        <MDBCol size={1}/>
                                     </MDBRow>
                                     <MDBRow>
                                         <MDBCol id="saveButton">

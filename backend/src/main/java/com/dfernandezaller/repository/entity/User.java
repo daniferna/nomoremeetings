@@ -39,6 +39,8 @@ public class User {
     int timeBetweenMeetings = 15;
     @Builder.Default
     String calendarId = "primary";
+    @Builder.Default
+    int daysToAnalyze = 7;
 
 }
 

@@ -12,7 +12,6 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.calendar.model.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import io.micronaut.core.convert.ConversionService;
@@ -57,19 +56,9 @@ public class UserServiceImp implements UserService {
                 .endLunchTime(requestDTO.endLunchTime())
                 .timeBetweenMeetings(requestDTO.timeBetweenMeetings().orElse(userDb.getTimeBetweenMeetings()))
                 .calendarId(requestDTO.calendarId().orElse(userDb.getCalendarId()))
+                .daysToAnalyze(requestDTO.daysToAnalyze().orElse(userDb.getDaysToAnalyze()))
                 .build();
         return conversionService.convert(userRepository.update(updatedUser), UserDTO.class);
-    }
-
-    @Override
-    // TODO: 15/05/2023 WIP
-    public Calendar getCalendar(String email) throws IOException {
-        var calendarService = initializeCalendarService("danixe.ferna@hotmail.com");
-        var calendarName = getUser(email).orElseThrow().calendarId();
-
-        var calendar = calendarService.calendars().get(calendarName).execute();
-
-        return calendar;
     }
 
     @Override
