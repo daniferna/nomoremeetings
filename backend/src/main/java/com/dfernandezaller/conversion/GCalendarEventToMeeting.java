@@ -51,9 +51,10 @@ public class GCalendarEventToMeeting implements TypeConverter<Event, Meeting> {
     }
 
     private MeetingType getEventType(String eventType, String eventStatus) {
+        eventType = eventType == null ? "default" : eventType;
         return switch (eventType) {
             case "outOfOffice" -> MeetingType.OOO;
-            case null, "default" -> {
+            case "default" -> {
                 if (Objects.equals(eventStatus, "cancelled"))
                     yield MeetingType.CANCELLED;
                 if (Objects.equals(eventStatus, "confirmed"))
