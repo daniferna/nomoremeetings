@@ -8,12 +8,10 @@ import {
     MDBCardBody,
     MDBCardImage,
     MDBCardText,
+    MDBCardTitle,
     MDBCol,
     MDBContainer,
-    MDBIcon,
     MDBInput,
-    MDBListGroup,
-    MDBListGroupItem,
     MDBModal,
     MDBModalBody,
     MDBModalContent,
@@ -25,13 +23,14 @@ import {
 } from 'mdb-react-ui-kit';
 import dayjs from "dayjs";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
-import {Alert, CircularProgress, FormControl, MenuItem, Select, Snackbar} from "@mui/material";
+import {Link, useNavigate} from "react-router-dom";
+import {Alert, CircularProgress, Divider, FormControl, MenuItem, Select, Snackbar} from "@mui/material";
 
 export default function UserProfile() {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
+    const [isLoading, setIsLoading] = useState(true);
 
     const [hoursModal, setHoursModal] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -54,6 +53,7 @@ export default function UserProfile() {
         } else if (userCalendars.length === 0) {
             loadUserCalendars();
         }
+        setIsLoading(false);
     }, [user, navigate]);
 
     useEffect(() => {
@@ -110,9 +110,14 @@ export default function UserProfile() {
         closeModalHours();
     }
 
+    if (isLoading) {
+        return (null);
+    }
+
     return (
         <section style={{backgroundColor: 'rgba(238,238,238,0.5)'}}>
-            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
+            <Snackbar anchorOrigin={{vertical: "bottom", horizontal: "right"}} open={snackbarOpen}
+                      autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{width: '100%'}}>
                     Changes saved successfully!
                 </Alert>
@@ -181,7 +186,7 @@ export default function UserProfile() {
                     <MDBCol>
                         <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
                             <MDBBreadcrumbItem>
-                                <a href='/'>Home</a>
+                                <Link to="/">Home</Link>
                             </MDBBreadcrumbItem>
                             <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
                         </MDBBreadcrumb>
@@ -207,34 +212,22 @@ export default function UserProfile() {
                             </MDBCardBody>
                         </MDBCard>
                         <MDBCard className="mb-4 mb-lg-0">
-                            <MDBCardBody className="p-0">
-                                <MDBListGroup flush className="rounded-3">
-                                    <MDBListGroupItem
-                                        className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon fas icon="globe fa-lg text-warning"/>
-                                        <MDBCardText>https://example.com</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem
-                                        className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon fab icon="github fa-lg" style={{color: '#333333'}}/>
-                                        <MDBCardText>Example</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem
-                                        className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon fab icon="twitter fa-lg" style={{color: '#55acee'}}/>
-                                        <MDBCardText>@Example</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem
-                                        className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon fab icon="instagram fa-lg" style={{color: '#ac2bac'}}/>
-                                        <MDBCardText>Example</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem
-                                        className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon fab icon="facebook fa-lg" style={{color: '#3b5998'}}/>
-                                        <MDBCardText>Example</MDBCardText>
-                                    </MDBListGroupItem>
-                                </MDBListGroup>
+                            <MDBCardBody style={{display: "flex", flexDirection: "column"}}>
+                                <MDBCardTitle className="mb-4">Working hours</MDBCardTitle>
+                                <MDBCardText className="cardTextProfile">Start working time</MDBCardText>
+                                <MDBCardText className="text-muted cardTextProfile-content">
+                                    {user?.startWorkingTime}
+                                </MDBCardText>
+                                <Divider/>
+                                <MDBCardText className="cardTextProfile">Lunch break</MDBCardText>
+                                <MDBCardText className="text-muted cardTextProfile-content">
+                                    {user?.startLunchTime} - {user?.endLunchTime}
+                                </MDBCardText>
+                                <Divider/>
+                                <MDBCardText className="cardTextProfile">End working time</MDBCardText>
+                                <MDBCardText className="text-muted cardTextProfile-content">
+                                    {user?.endWorkingTime}
+                                </MDBCardText>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
@@ -263,44 +256,6 @@ export default function UserProfile() {
                             </MDBCardBody>
                         </MDBCard>
                         <MDBCol>
-                            <MDBCard className="mb-4">
-                                <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"> Working
-                                    Hours </MDBBreadcrumb>
-                                <MDBCardBody>
-                                    <MDBRow center>
-                                        <MDBCol center>
-                                            <MDBCardText>Start working time</MDBCardText>
-                                        </MDBCol>
-                                        <MDBCol end>
-                                            <MDBCardText className="text-muted">
-                                                {user?.startWorkingTime}
-                                            </MDBCardText>
-                                        </MDBCol>
-                                    </MDBRow>
-                                    <hr/>
-                                    <MDBRow center>
-                                        <MDBCol start>
-                                            <MDBCardText>Lunch break</MDBCardText>
-                                        </MDBCol>
-                                        <MDBCol end>
-                                            <MDBCardText className="text-muted">
-                                                {user?.startLunchTime} - {user?.endLunchTime}
-                                            </MDBCardText>
-                                        </MDBCol>
-                                    </MDBRow>
-                                    <hr/>
-                                    <MDBRow center>
-                                        <MDBCol start>
-                                            <MDBCardText>End working time</MDBCardText>
-                                        </MDBCol>
-                                        <MDBCol end>
-                                            <MDBCardText className="text-muted">
-                                                {user?.endWorkingTime}
-                                            </MDBCardText>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </MDBCardBody>
-                            </MDBCard>
                             <MDBCard className="mb-4">
                                 <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4"> Configuration </MDBBreadcrumb>
                                 <MDBCardBody>
