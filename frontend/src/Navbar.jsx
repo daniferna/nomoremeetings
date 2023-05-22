@@ -5,12 +5,12 @@ import {
     MDBNavbar,
     MDBNavbarBrand,
     MDBNavbarItem,
-    MDBNavbarLink,
     MDBNavbarNav,
     MDBNavbarToggler,
 } from 'mdb-react-ui-kit';
 import LoginComponent from "./LoginComponent";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 function AppMDBNavbar() {
 
@@ -19,9 +19,11 @@ function AppMDBNavbar() {
     return (
         <MDBNavbar expand='lg' light bgColor='light'>
             <MDBContainer fluid>
-                <MDBNavbarBrand href="/">
-                    <img src="/logoNoMoreMeetings.svg" loading={"lazy"} height={30}></img>
-                    NoMoreMeetings
+                <MDBNavbarBrand>
+                    <Link className="navbarLinkBrand" to="/">
+                        <img src="/logoNoMoreMeetings.svg" loading={"lazy"} height={30}></img>
+                        NoMoreMeetings
+                    </Link>
                 </MDBNavbarBrand>
 
                 <MDBNavbarToggler
@@ -36,15 +38,19 @@ function AppMDBNavbar() {
                 <MDBCollapse navbar show={showBasic}>
                     <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
-                            <MDBNavbarLink aria-current='page' href='/'>
+                            <Link to="/" className="navbarLink, nav-link">
                                 Home
-                            </MDBNavbarLink>
+                            </Link>
                         </MDBNavbarItem>
                         <MDBNavbarItem>
-                            <MDBNavbarLink href='userProfile'>User profile</MDBNavbarLink>
+                            <Link to='/userProfile' className="navbarLink, nav-link">
+                                User profile
+                            </Link>
                         </MDBNavbarItem>
                         <MDBNavbarItem>
-                            <MDBNavbarLink href='timeAnalysis'>Time analysis</MDBNavbarLink>
+                            <Link to='/timeAnalysis' aria-current='page' className="navbarLink, nav-link">
+                                Time analysis
+                            </Link>
                         </MDBNavbarItem>
                     </MDBNavbarNav>
                     <LoginComponent/>
