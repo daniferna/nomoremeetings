@@ -1,15 +1,29 @@
 import React from 'react';
 import {ResponsivePie} from '@nivo/pie';
-import {Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@mui/material';
+import {
+    Grid,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+    useMediaQuery
+} from '@mui/material';
 
 function WorkHoursComponent({data}) {
+
+    const isMobile = useMediaQuery('(max-width:500px)');
+
     const totalWorkTime = data.totalWorkTime;
-    const workedTime = totalWorkTime - data.busyHours - data.tentativeHours - data.oooHours;
+    const freeTime = totalWorkTime - data.busyHours - data.tentativeHours - data.oooHours;
     let tableData = [
         {id: 'Busy Hours', value: data.busyHours},
         {id: 'Tentative Hours', value: data.tentativeHours},
         {id: 'OOO Hours', value: data.oooHours},
-        {id: 'Worked Hours', value: workedTime},
+        {id: 'Free Hours', value: freeTime},
     ];
 
     // Filtrar los datos para eliminar elementos con valor 0
@@ -62,10 +76,10 @@ function WorkHoursComponent({data}) {
                 </TableContainer>
             </Grid>
             <Grid item xs={12} md={6}>
-                <div style={{height: '100%'}}>
+                <div style={{height: '100%', minHeight: '250px'}}>
                     <ResponsivePie
                         data={pieChartData}
-                        margin={{top: 30, bottom: 30}}
+                        margin={{top: 30, bottom: 30, left: 30, right: 30}}
                         innerRadius={0.5}
                         padAngle={0.7}
                         cornerRadius={3}
@@ -80,6 +94,35 @@ function WorkHoursComponent({data}) {
                         animate={true}
                         motionStiffness={90}
                         motionDamping={15}
+                        startAngle={90}
+                        endAngle={-90}
+                        enableArcLinkLabels={false}
+                        activeOuterRadiusOffset={8}
+                        legends={!isMobile ? [
+                            {
+                                anchor: 'bottom',
+                                direction: 'row',
+                                justify: false,
+                                translateX: 0,
+                                translateY: 20,
+                                itemsSpacing: 15,
+                                itemWidth: 100,
+                                itemHeight: 18,
+                                itemTextColor: '#999',
+                                itemDirection: 'left-to-right',
+                                itemOpacity: 1,
+                                symbolSize: 18,
+                                symbolShape: 'circle',
+                                effects: [
+                                    {
+                                        on: 'hover',
+                                        style: {
+                                            itemTextColor: '#000'
+                                        }
+                                    }
+                                ]
+                            }
+                        ] : []}
                     />
                 </div>
             </Grid>
