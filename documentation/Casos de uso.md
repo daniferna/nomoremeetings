@@ -79,52 +79,17 @@ La aplicación ofrece la opción de configurar el tiempo entre reuniones que se 
 
 ### Caso de uso: Registrarse con la cuenta de Google
 
-**Actor Principal**: Usuario
-
-**Actores Secundarios**: API de Google
-
-**Stakeholders y sus intereses**:
-- Usuario: Quiere registrarse en la aplicación para poder utilizar sus funcionalidades.
-- API de Google: Proporciona la autenticación y autorización para el registro del usuario.
-
-**Precondiciones**:
-- El usuario debe tener una cuenta de Google válida.
-- El usuario no debe estar registrado previamente en la aplicación.
-
-**Postcondiciones**:
-- El usuario está registrado en la aplicación y puede iniciar sesión con su cuenta de Google.
-
-
-**Escenario principal**
-
-1. Un usuario anónimo accede a la aplicación.
-2. La aplicación ofrece la opción de iniciar sesión con la cuenta de Google.
-3. El usuario anónimo selecciona iniciar sesión con la cuenta de Google.
-4. La aplicación redirige al usuario al sistema de autenticación de Google, que solicita permisos para acceder al calendario del usuario.
-5. Tras completar el registro, el sistema redirige al usuario a la pantalla principal con la sesión iniciada.
-
-**Escenarios alternativos**
-
- * 3a. El usuario cancela el proceso de inicio de sesión
-    1. El usuario decide cancelar el proceso de inicio de sesión.
-    2. El sistema redirige al usuario a la pantalla inicial sin iniciar sesión.
-
- * 4a. El usuario rechaza los permisos para acceder al calendario
-    1. Google solicita al usuario permisos para acceder al calendario y el usuario rechaza.
-    2. El sistema informa al usuario que los permisos son necesarios para usar la aplicación.
-    3. El usuario...
-       1. Decide conceder los permisos.
-       2. Cancela el proceso de inicio de sesión.
-
-* 5a. Error durante el proceso de autenticación
-   1. El sistema detecta un error durante el proceso de autenticación.
-   2. El sistema muestra un mensaje de error al usuario e indica que intente iniciar sesión más tarde.
-
-**Requisitos especiales**:
-- La aplicación debe cumplir con los términos de servicio de la API de Google.
-- La aplicación debe manejar de manera segura y confidencial los tokens de acceso proporcionados por Google.
-
-**Frecuencia de ocurrencia**: Puede ocurrir varias veces al día, dependiendo del número de nuevos usuarios.
+| **Caso de Uso**                  | Registrarse con la cuenta de Google                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Actor Principal**              | Usuario                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **Actores Secundarios**          | API de Google                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Stakeholders y sus intereses** | Usuario: Quiere registrarse en la aplicación para poder utilizar sus funcionalidades.<br>API de Google: Proporciona la autenticación y autorización para el registro del usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **Precondiciones**               | El usuario debe tener una cuenta de Google válida.<br>El usuario no debe estar registrado previamente en la aplicación.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **Postcondiciones**              | El usuario está registrado en la aplicación y puede iniciar sesión con su cuenta de Google.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Escenario principal**          | 1. Un usuario anónimo accede a la aplicación.<br>2. La aplicación ofrece la opción de iniciar sesión con la cuenta de Google.<br>3. El usuario anónimo selecciona iniciar sesión con la cuenta de Google.<br>4. La aplicación redirige al usuario al sistema de autenticación de Google, que solicita permisos para acceder al calendario del usuario.<br>5. Tras completar el registro, el sistema redirige al usuario a la pantalla principal con la sesión iniciada.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| **Escenarios alternativos**      | 3a. El usuario cancela el proceso de inicio de sesión:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. El usuario decide cancelar el proceso de inicio de sesión.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El sistema redirige al usuario a la pantalla inicial sin iniciar sesión.<br>4a. El usuario rechaza los permisos para acceder al calendario:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. Google solicita al usuario permisos para acceder al calendario y el usuario rechaza.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El sistema informa al usuario que los permisos son necesarios para usar la aplicación.<br>&nbsp;&nbsp;&nbsp;&nbsp;3. El usuario...<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Decide conceder los permisos.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Cancela el proceso de inicio de sesión.<br>5a. Error durante el proceso de autenticación:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. El sistema detecta un error durante el proceso de autenticación.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El sistema muestra un mensaje de error al usuario e indica que intente iniciar sesión más tarde. |
+| **Requisitos especiales**        | La aplicación debe cumplir con los términos de servicio de la API de Google.<br>La aplicación debe manejar de manera segura y confidencial los tokens de acceso proporcionados por Google.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo del número de nuevos usuarios.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 #### Diagrama de casos de uso
 
@@ -145,7 +110,7 @@ flowchart TD
     D--Error durante el proceso de autenticación-->J[Mostrar mensaje de error]
     J--Indica que intente iniciar sesión más tarde-->H
 
-%% Special requirements
+%% Styles
     style G fill:#cfc
     style H fill:#fcc
 
@@ -167,6 +132,31 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe cumplir con los términos de servicio de la API de Google.<br>La aplicación debe manejar de manera segura y confidencial los tokens de acceso proporcionados por Google.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo del número de usuarios activos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
+#### Diagrama de casos de uso
+
+```mermaid
+flowchart TD
+%% Trigger event
+    A[Usuario ya registrado accede a la aplicación]-->B((Aplicación))
+    B--Ofrece las opciones de iniciar sesión-->C((API de Google))
+
+%% Main success scenario
+    C--Redirige al usuario a la página de inicio de sesión de Google-->D{Usuario inicia sesión}
+    D--Valida las credenciales y concede el acceso-->E((Aplicación))
+    E--Redirige al usuario a la página principal-->F[Usuario con sesión iniciada]
+
+%% Alternative scenarios
+    D--Introduce credenciales incorrectas en Google-->G[Google muestra un mensaje de error]
+    G--Usuario puede intentar introducir las credenciales de nuevo o abandonar la operación-->D
+    D--Error en la validación de las credenciales por parte del sistema-->H[Aplicación muestra un mensaje de error]
+    H--Indica que ha habido un problema en el inicio de sesión y que lo intentará de nuevo más tarde-->A
+    A--Usuario decide cancelar el inicio de sesión-->I[Aplicación cancela la operación y mantiene al usuario en la pantalla de inicio de sesión]
+
+%% Styles
+    style F fill:#cfc
+    style I fill:#fcc
+```
+
 ### Caso de uso: Configurar el tiempo de trabajo
 
 | **Caso de Uso**                  | Configurar el tiempo de trabajo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -180,7 +170,28 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe validar que las horas de trabajo introducidas por el usuario son válidas y están en el formato correcto.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar sus horas de trabajo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
+#### Diagrama de caso de uso
 
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario inicia la edición de sus horas de trabajo]-->B((Aplicación))
+    B--Solicita la información requerida-->C{Usuario introduce la información}
+
+    %% Main success scenario
+    C--Introduce las horas de trabajo en el formato correcto-->D((Aplicación))
+    D--Registra las nuevas horas de trabajo y las añade al perfil del usuario-->E[Aplicación muestra al usuario la confirmación de que las horas de trabajo se han actualizado]
+
+    %% Alternative scenarios
+    C--Usuario cancela la edición-->F[Aplicación cancela la operación y muestra la configuración del perfil del usuario sin cambios]
+    C--Introduce un formato incorrecto de horas de trabajo-->G[Aplicación solicita de nuevo la información, especificando el formato correcto de las horas de trabajo]
+    G--Usuario introduce las horas de trabajo en el formato correcto-->D
+    G--Usuario abandona la operación-->F
+
+    %% Styles
+    style E fill:#cfc
+    style F fill:#fcc
+```
 
 ### Caso de uso: Seleccionar calendarios para los cálculos
 
@@ -195,6 +206,27 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe poder acceder a los calendarios seleccionados por el usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar los calendarios que se utilizan para los cálculos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
+#### Diagrama de caso de uso
+
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
+    B--Muestra los calendarios disponibles para seleccionar-->C{Usuario selecciona los calendarios}
+
+    %% Main success scenario
+    C--Selecciona los calendarios para los cálculos-->D((Aplicación))
+    D--Registra la elección del usuario y actualiza los calendarios-->E[Aplicación muestra confirmación de que los calendarios se han actualizado correctamente]
+
+    %% Alternative scenarios
+    C--Usuario cancela la selección-->F[Aplicación cancela la operación y mantiene la configuración de calendarios actual]
+    C--Error al actualizar los calendarios-->G[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
+
+    %% Styles
+    style E fill:#cfc
+    style F fill:#fcc
+    style G fill:#fcc
+```
 
 ### Caso de uso: Seleccionar periodo temporal para los cálculos
 
@@ -209,6 +241,28 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe validar que el periodo temporal seleccionado por el usuario es válido.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar el periodo temporal para los cálculos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
+#### Diagrama de caso de uso
+
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
+    B--Muestra las opciones de periodo temporal para seleccionar-->C{Usuario selecciona el periodo temporal}
+
+    %% Main success scenario
+    C--Selecciona el periodo temporal para los cálculos-->D((Aplicación))
+    D--Registra la elección del usuario y actualiza el periodo temporal-->E[Aplicación muestra confirmación de que el periodo temporal se ha actualizado correctamente]
+
+    %% Alternative scenarios
+    C--Usuario cancela la selección-->F[Aplicación cancela la operación y mantiene la configuración de periodo temporal actual]
+    C--Error al actualizar el periodo temporal-->G[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
+
+    %% Styles
+    style E fill:#cfc
+    style F fill:#fcc
+    style G fill:#fcc
+```
+
 ### Caso de uso: Ver el tiempo gastado en reuniones
 
 | **Caso de uso**                  | Ver el tiempo gastado en reuniones                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -222,6 +276,26 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe ser capaz de calcular el tiempo gastado en reuniones basándose en los datos del calendario del usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen ver el tiempo gastado en reuniones.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
+#### Diagrama de caso de uso
+
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
+    B--Recopila y calcula el tiempo total gastado en reuniones-->C{Aplicación muestra el tiempo gastado en reuniones}
+
+    %% Main success scenario
+    C--Muestra el tiempo gastado en reuniones en formato de texto y en una gráfica-->D[Usuario ve el tiempo gastado en reuniones]
+
+    %% Alternative scenarios
+    C--No hay datos de reuniones disponibles-->E[Aplicación muestra un mensaje informando la falta de datos]
+    C--Error al recopilar o procesar los datos-->F[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
+
+    %% Styles
+    style D fill:#cfc
+    style E fill:#fcc
+    style F fill:#fcc
+```
 
 ### Caso de uso: Ver el porcentaje de tiempo gastado en reuniones y tiempo libre
 
@@ -236,6 +310,26 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe ser capaz de calcular el porcentaje de tiempo gastado en reuniones y el tiempo libre basándose en los datos del calendario del usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen ver el porcentaje de tiempo gastado en reuniones y el tiempo libre.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
+#### Diagrama de caso de uso:
+
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
+    B--Recopila y calcula el porcentaje de tiempo gastado en reuniones y tiempo libre-->C{Aplicación muestra los porcentajes}
+
+    %% Main success scenario
+    C--Muestra los porcentajes en formato de texto y en una gráfica-->D[Usuario ve el porcentaje de tiempo gastado en reuniones y tiempo libre]
+
+    %% Alternative scenarios
+    C--No hay datos de reuniones disponibles-->E[Aplicación muestra un mensaje informando la falta de datos]
+    C--Error al recopilar o procesar los datos-->F[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
+
+    %% Styles
+    style D fill:#cfc
+    style E fill:#fcc
+    style F fill:#fcc
+```
 
 ### Caso de uso: Configurar el tiempo entre reuniones que cuenta como tiempo de reunión
 
@@ -249,3 +343,27 @@ flowchart TD
 | **Escenarios alternativos**      | 1-3a. El usuario cancela la edición:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. El usuario solicita al sistema que cancele la edición del tiempo entre reuniones que cuenta como tiempo de reunión.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El sistema muestra la configuración del perfil del usuario sin cambios.<br>4a. El usuario introduce un formato incorrecto de intervalo de tiempo:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. El sistema solicita de nuevo la información, especificando el formato correcto del intervalo de tiempo.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El usuario...<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Introduce el intervalo de tiempo en el formato correcto.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. Abandona la operación.<br>4b. Error al procesar la nueva configuración:<br>&nbsp;&nbsp;&nbsp;&nbsp;1. El sistema identifica que ha habido un error al procesar la nueva configuración.<br>&nbsp;&nbsp;&nbsp;&nbsp;2. El sistema muestra un mensaje de error al usuario indicando que ha habido un problema y que lo intentará de nuevo más tarde. |
 | **Requisitos especiales**        | La aplicación debe validar que el tiempo entre reuniones introducido por el usuario es válido y está en el formato correcto.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen configurar el tiempo entre reuniones que cuenta como tiempo de reunión.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+
+#### Diagrama de caso de uso:
+
+```mermaid
+flowchart TD
+    %% Trigger event
+    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
+    B--Muestra las opciones para configurar el tiempo entre reuniones-->C{Usuario selecciona el intervalo}
+
+    %% Main success scenario
+    C--Indica que quiere configurar este tiempo-->D((Aplicación))
+    D--Registra la nueva configuración y actualiza el perfil del usuario-->E[Usuario ve la confirmación de que la configuración ha sido actualizada]
+
+    %% Alternative scenarios
+    C--Usuario cancela la edición-->F[Aplicación muestra la configuración del perfil del usuario sin cambios]
+    C--Usuario introduce un formato incorrecto de intervalo de tiempo-->G[Aplicación solicita de nuevo la información, especificando el formato correcto del intervalo de tiempo]
+    D--Error al procesar la nueva configuración-->H[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
+
+    %% Styles
+    style E fill:#cfc
+    style F fill:#fcc
+    style G fill:#fcc
+    style H fill:#fcc
+```
