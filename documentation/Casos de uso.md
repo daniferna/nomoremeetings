@@ -93,7 +93,7 @@ La aplicación ofrece la opción de configurar el tiempo entre reuniones que se 
 
 #### Diagrama de casos de uso
 
-```mermaid
+```mermaid 
 flowchart TD
 %% Trigger event
     A[Usuario anónimo accede a la aplicación]-->B((Aplicación))
@@ -134,7 +134,7 @@ flowchart TD
 
 #### Diagrama de casos de uso
 
-```mermaid
+```mermaid 
 flowchart TD
 %% Trigger event
     A[Usuario ya registrado accede a la aplicación]-->B((Aplicación))
@@ -172,7 +172,7 @@ flowchart TD
 
 #### Diagrama de caso de uso
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario inicia la edición de sus horas de trabajo]-->B((Aplicación))
@@ -208,7 +208,7 @@ flowchart TD
 
 #### Diagrama de caso de uso
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
@@ -243,7 +243,7 @@ flowchart TD
 
 #### Diagrama de caso de uso
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
@@ -278,7 +278,7 @@ flowchart TD
 
 #### Diagrama de caso de uso
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
@@ -312,7 +312,7 @@ flowchart TD
 
 #### Diagrama de caso de uso:
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
@@ -346,7 +346,7 @@ flowchart TD
 
 #### Diagrama de caso de uso:
 
-```mermaid
+```mermaid 
 flowchart TD
     %% Trigger event
     A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
@@ -367,3 +367,88 @@ flowchart TD
     style G fill:#fcc
     style H fill:#fcc
 ```
+
+## Analisis del modelo
+### Diagrama de clases
+
+```mermaid 
+classDiagram
+   class Usuario {
+      +iniciarSesion()
+      +configurarPerfil()
+      +verDatos()
+   }
+
+   class GoogleAPI {
+      +validarUsuario()
+      +obtenerCalendarios()
+   }
+
+   class Aplicación {
+      +mostrarDatos()
+      +validarUsuario()
+      +actualizarDatos()
+      +realizarAnalisis()
+   }
+
+   class DatosUsuario {
+      -perfilUsuario : Perfil
+      -configuraciones : Configuración
+   }
+
+   class Perfil {
+      -nombre : String
+      -email : String
+   }
+
+   class Configuración {
+      -horasTrabajo : Int
+      -calendariosSeleccionados : String[]
+      -periodoTemporal : String
+   }
+
+   Usuario "*" -- "*" Aplicación : usa
+   Aplicación "1" -- "1" GoogleAPI : maneja
+   Aplicación "1" o-- "*" DatosUsuario : contiene
+   DatosUsuario "1" -- "1" Perfil : tiene
+   DatosUsuario "1" -- "1" Configuración : tiene
+
+```
+
+### Descripción de las clases
+
+#### Usuario
+
+| Nombre  | Descripción                             | Responsabilidades                                                                        | Atributos | Operaciones                                     |
+|---------|-----------------------------------------|------------------------------------------------------------------------------------------|-----------|-------------------------------------------------|
+| Usuario | Representa al usuario de la aplicación. | Interactuar con la aplicación para iniciar sesión, configurar su perfil y ver sus datos. | N/A       | iniciarSesion(), configurarPerfil(), verDatos() |
+
+#### GoogleAPI
+
+| Nombre    | Descripción                                                                                | Responsabilidades                                              | Atributos | Operaciones                            |
+|-----------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------|-----------|----------------------------------------|
+| GoogleAPI | Representa la API de Google utilizada para la autenticación y la obtención de calendarios. | Validar al usuario y proporcionar los calendarios del usuario. | N/A       | validarUsuario(), obtenerCalendarios() |
+
+#### Aplicación
+
+| Nombre     | Descripción                                      | Responsabilidades                                                                                                                                                                 | Atributos | Operaciones                                                             |
+|------------|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|-------------------------------------------------------------------------|
+| Aplicación | Representa la aplicación que el usuario utiliza. | Manejar la interacción del usuario con la aplicación y la API de Google, mostrar los datos del usuario, validar al usuario, actualizar los datos del usuario y realizar análisis. | N/A       | mostrarDatos(), validarUsuario(), actualizarDatos(), realizarAnalisis() |
+
+#### DatosUsuario
+
+| Nombre       | Descripción                                        | Responsabilidades                                     | Atributos                                               | Operaciones |
+|--------------|----------------------------------------------------|-------------------------------------------------------|---------------------------------------------------------|-------------|
+| DatosUsuario | Representa los datos del usuario en la aplicación. | Contener el perfil y las configuraciones del usuario. | perfilUsuario (Perfil), configuraciones (Configuración) | N/A         |
+
+#### Perfil
+
+| Nombre | Descripción                       | Responsabilidades                                       | Atributos                       | Operaciones |
+|--------|-----------------------------------|---------------------------------------------------------|---------------------------------|-------------|
+| Perfil | Representa el perfil del usuario. | Contener el nombre y el correo electrónico del usuario. | nombre (String), email (String) | N/A         |
+
+#### Configuración
+
+| Nombre        | Descripción                                 | Responsabilidades                                                                               | Atributos                                                                         | Operaciones |
+|---------------|---------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|-------------|
+| Configuración | Representa las configuraciones del usuario. | Contener las horas de trabajo, los calendarios seleccionados y el periodo temporal del usuario. | horasTrabajo (Int), calendariosSeleccionados (String[]), periodoTemporal (String) | N/A         |
