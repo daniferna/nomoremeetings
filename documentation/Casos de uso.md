@@ -91,33 +91,9 @@ La aplicación ofrece la opción de configurar el tiempo entre reuniones que se 
 | **Requisitos especiales**        | La aplicación debe cumplir con los términos de servicio de la API de Google.<br>La aplicación debe manejar de manera segura y confidencial los tokens de acceso proporcionados por Google.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo del número de nuevos usuarios.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
-#### Diagrama de casos de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-%% Trigger event
-    A[Usuario anónimo accede a la aplicación]-->B((Aplicación))
-    B--Ofrece iniciar sesión con la cuenta de Google-->C((API de Google))
-
-%% Main success scenario
-    C--Redirige al sistema de autenticación de Google-->D{Usuario inicia sesión}
-    D--Solicita permisos de acceso al calendario-->E[Usuario acepta los permisos]
-    E--Completa el registro-->F((Aplicación))
-    F--Redirige al usuario a la pantalla principal-->G[Usuario con sesión iniciada]
-
-%% Alternative scenarios
-    D--Cancela el proceso de inicio de sesión-->H[Redirige al usuario a la pantalla inicial]
-    D--Error durante el proceso de autenticación-->J[Mostrar mensaje de error]
-    J--Indica que intente iniciar sesión más tarde-->H
-
-%% Styles
-    style G fill:#cfc
-    style H fill:#fcc
-
-%% Additional flow
-    E--No-->H
-
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiUlIFRyaWdnZXIgZXZlbnRcbiAgICBBW1VzdWFyaW8gYW7Ds25pbW8gYWNjZWRlIGEgbGEgYXBsaWNhY2nDs25dLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLU9mcmVjZSBpbmljaWFyIHNlc2nDs24gY29uIGxhIGN1ZW50YSBkZSBHb29nbGUtLT5DKChBUEkgZGUgR29vZ2xlKSlcblxuJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tUmVkaXJpZ2UgYWwgc2lzdGVtYSBkZSBhdXRlbnRpY2FjacOzbiBkZSBHb29nbGUtLT5Ee1VzdWFyaW8gaW5pY2lhIHNlc2nDs259XG4gICAgRC0tU29saWNpdGEgcGVybWlzb3MgZGUgYWNjZXNvIGFsIGNhbGVuZGFyaW8tLT5FW1VzdWFyaW8gYWNlcHRhIGxvcyBwZXJtaXNvc11cbiAgICBFLS1Db21wbGV0YSBlbCByZWdpc3Ryby0tPkYoKEFwbGljYWNpw7NuKSlcbiAgICBGLS1SZWRpcmlnZSBhbCB1c3VhcmlvIGEgbGEgcGFudGFsbGEgcHJpbmNpcGFsLS0-R1tVc3VhcmlvIGNvbiBzZXNpw7NuIGluaWNpYWRhXVxuXG4lJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBELS1DYW5jZWxhIGVsIHByb2Nlc28gZGUgaW5pY2lvIGRlIHNlc2nDs24tLT5IW1JlZGlyaWdlIGFsIHVzdWFyaW8gYSBsYSBwYW50YWxsYSBpbmljaWFsXVxuICAgIEQtLUVycm9yIGR1cmFudGUgZWwgcHJvY2VzbyBkZSBhdXRlbnRpY2FjacOzbi0tPkpbTW9zdHJhciBtZW5zYWplIGRlIGVycm9yXVxuICAgIEotLUluZGljYSBxdWUgaW50ZW50ZSBpbmljaWFyIHNlc2nDs24gbcOhcyB0YXJkZS0tPkhcblxuJSUgU3R5bGVzXG4gICAgc3R5bGUgRyBmaWxsOiNjZmNcbiAgICBzdHlsZSBIIGZpbGw6I2ZjY1xuXG4lJSBBZGRpdGlvbmFsIGZsb3dcbiAgICBFLS1Oby0tPkhcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiUlIFRyaWdnZXIgZXZlbnRcbiAgICBBW1VzdWFyaW8gYW7Ds25pbW8gYWNjZWRlIGEgbGEgYXBsaWNhY2nDs25dLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLU9mcmVjZSBpbmljaWFyIHNlc2nDs24gY29uIGxhIGN1ZW50YSBkZSBHb29nbGUtLT5DKChBUEkgZGUgR29vZ2xlKSlcblxuJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tUmVkaXJpZ2UgYWwgc2lzdGVtYSBkZSBhdXRlbnRpY2FjacOzbiBkZSBHb29nbGUtLT5Ee1VzdWFyaW8gaW5pY2lhIHNlc2nDs259XG4gICAgRC0tU29saWNpdGEgcGVybWlzb3MgZGUgYWNjZXNvIGFsIGNhbGVuZGFyaW8tLT5FW1VzdWFyaW8gYWNlcHRhIGxvcyBwZXJtaXNvc11cbiAgICBFLS1Db21wbGV0YSBlbCByZWdpc3Ryby0tPkYoKEFwbGljYWNpw7NuKSlcbiAgICBGLS1SZWRpcmlnZSBhbCB1c3VhcmlvIGEgbGEgcGFudGFsbGEgcHJpbmNpcGFsLS0-R1tVc3VhcmlvIGNvbiBzZXNpw7NuIGluaWNpYWRhXVxuXG4lJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBELS1DYW5jZWxhIGVsIHByb2Nlc28gZGUgaW5pY2lvIGRlIHNlc2nDs24tLT5IW1JlZGlyaWdlIGFsIHVzdWFyaW8gYSBsYSBwYW50YWxsYSBpbmljaWFsXVxuICAgIEQtLUVycm9yIGR1cmFudGUgZWwgcHJvY2VzbyBkZSBhdXRlbnRpY2FjacOzbi0tPkpbTW9zdHJhciBtZW5zYWplIGRlIGVycm9yXVxuICAgIEotLUluZGljYSBxdWUgaW50ZW50ZSBpbmljaWFyIHNlc2nDs24gbcOhcyB0YXJkZS0tPkhcblxuJSUgU3R5bGVzXG4gICAgc3R5bGUgRyBmaWxsOiNjZmNcbiAgICBzdHlsZSBIIGZpbGw6I2ZjY1xuXG4lJSBBZGRpdGlvbmFsIGZsb3dcbiAgICBFLS1Oby0tPkhcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19![img.png](img.png))
 
 ### Caso de uso: Iniciar sesión con la cuenta de Google
 | **Caso de Uso**                  | Iniciar sesión con la cuenta de Google                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -132,30 +108,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe cumplir con los términos de servicio de la API de Google.<br>La aplicación debe manejar de manera segura y confidencial los tokens de acceso proporcionados por Google.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo del número de usuarios activos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
-#### Diagrama de casos de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-%% Trigger event
-    A[Usuario ya registrado accede a la aplicación]-->B((Aplicación))
-    B--Ofrece las opciones de iniciar sesión-->C((API de Google))
-
-%% Main success scenario
-    C--Redirige al usuario a la página de inicio de sesión de Google-->D{Usuario inicia sesión}
-    D--Valida las credenciales y concede el acceso-->E((Aplicación))
-    E--Redirige al usuario a la página principal-->F[Usuario con sesión iniciada]
-
-%% Alternative scenarios
-    D--Introduce credenciales incorrectas en Google-->G[Google muestra un mensaje de error]
-    G--Usuario puede intentar introducir las credenciales de nuevo o abandonar la operación-->D
-    D--Error en la validación de las credenciales por parte del sistema-->H[Aplicación muestra un mensaje de error]
-    H--Indica que ha habido un problema en el inicio de sesión y que lo intentará de nuevo más tarde-->A
-    A--Usuario decide cancelar el inicio de sesión-->I[Aplicación cancela la operación y mantiene al usuario en la pantalla de inicio de sesión]
-
-%% Styles
-    style F fill:#cfc
-    style I fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiUlIFRyaWdnZXIgZXZlbnRcbiAgICBBW1VzdWFyaW8geWEgcmVnaXN0cmFkbyBhY2NlZGUgYSBsYSBhcGxpY2FjacOzbl0tLT5CKChBcGxpY2FjacOzbikpXG4gICAgQi0tT2ZyZWNlIGxhcyBvcGNpb25lcyBkZSBpbmljaWFyIHNlc2nDs24tLT5DKChBUEkgZGUgR29vZ2xlKSlcblxuJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tUmVkaXJpZ2UgYWwgdXN1YXJpbyBhIGxhIHDDoWdpbmEgZGUgaW5pY2lvIGRlIHNlc2nDs24gZGUgR29vZ2xlLS0-RHtVc3VhcmlvIGluaWNpYSBzZXNpw7NufVxuICAgIEQtLVZhbGlkYSBsYXMgY3JlZGVuY2lhbGVzIHkgY29uY2VkZSBlbCBhY2Nlc28tLT5FKChBcGxpY2FjacOzbikpXG4gICAgRS0tUmVkaXJpZ2UgYWwgdXN1YXJpbyBhIGxhIHDDoWdpbmEgcHJpbmNpcGFsLS0-RltVc3VhcmlvIGNvbiBzZXNpw7NuIGluaWNpYWRhXVxuXG4lJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBELS1JbnRyb2R1Y2UgY3JlZGVuY2lhbGVzIGluY29ycmVjdGFzIGVuIEdvb2dsZS0tPkdbR29vZ2xlIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvcl1cbiAgICBHLS1Vc3VhcmlvIHB1ZWRlIGludGVudGFyIGludHJvZHVjaXIgbGFzIGNyZWRlbmNpYWxlcyBkZSBudWV2byBvIGFiYW5kb25hciBsYSBvcGVyYWNpw7NuLS0-RFxuICAgIEQtLUVycm9yIGVuIGxhIHZhbGlkYWNpw7NuIGRlIGxhcyBjcmVkZW5jaWFsZXMgcG9yIHBhcnRlIGRlbCBzaXN0ZW1hLS0-SFtBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3JdXG4gICAgSC0tSW5kaWNhIHF1ZSBoYSBoYWJpZG8gdW4gcHJvYmxlbWEgZW4gZWwgaW5pY2lvIGRlIHNlc2nDs24geSBxdWUgbG8gaW50ZW50YXLDoSBkZSBudWV2byBtw6FzIHRhcmRlLS0-QVxuICAgIEEtLVVzdWFyaW8gZGVjaWRlIGNhbmNlbGFyIGVsIGluaWNpbyBkZSBzZXNpw7NuLS0-SVtBcGxpY2FjacOzbiBjYW5jZWxhIGxhIG9wZXJhY2nDs24geSBtYW50aWVuZSBhbCB1c3VhcmlvIGVuIGxhIHBhbnRhbGxhIGRlIGluaWNpbyBkZSBzZXNpw7NuXVxuXG4lJSBTdHlsZXNcbiAgICBzdHlsZSBGIGZpbGw6I2NmY1xuICAgIHN0eWxlIEkgZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiUlIFRyaWdnZXIgZXZlbnRcbiAgICBBW1VzdWFyaW8geWEgcmVnaXN0cmFkbyBhY2NlZGUgYSBsYSBhcGxpY2FjacOzbl0tLT5CKChBcGxpY2FjacOzbikpXG4gICAgQi0tT2ZyZWNlIGxhcyBvcGNpb25lcyBkZSBpbmljaWFyIHNlc2nDs24tLT5DKChBUEkgZGUgR29vZ2xlKSlcblxuJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tUmVkaXJpZ2UgYWwgdXN1YXJpbyBhIGxhIHDDoWdpbmEgZGUgaW5pY2lvIGRlIHNlc2nDs24gZGUgR29vZ2xlLS0-RHtVc3VhcmlvIGluaWNpYSBzZXNpw7NufVxuICAgIEQtLVZhbGlkYSBsYXMgY3JlZGVuY2lhbGVzIHkgY29uY2VkZSBlbCBhY2Nlc28tLT5FKChBcGxpY2FjacOzbikpXG4gICAgRS0tUmVkaXJpZ2UgYWwgdXN1YXJpbyBhIGxhIHDDoWdpbmEgcHJpbmNpcGFsLS0-RltVc3VhcmlvIGNvbiBzZXNpw7NuIGluaWNpYWRhXVxuXG4lJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBELS1JbnRyb2R1Y2UgY3JlZGVuY2lhbGVzIGluY29ycmVjdGFzIGVuIEdvb2dsZS0tPkdbR29vZ2xlIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvcl1cbiAgICBHLS1Vc3VhcmlvIHB1ZWRlIGludGVudGFyIGludHJvZHVjaXIgbGFzIGNyZWRlbmNpYWxlcyBkZSBudWV2byBvIGFiYW5kb25hciBsYSBvcGVyYWNpw7NuLS0-RFxuICAgIEQtLUVycm9yIGVuIGxhIHZhbGlkYWNpw7NuIGRlIGxhcyBjcmVkZW5jaWFsZXMgcG9yIHBhcnRlIGRlbCBzaXN0ZW1hLS0-SFtBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3JdXG4gICAgSC0tSW5kaWNhIHF1ZSBoYSBoYWJpZG8gdW4gcHJvYmxlbWEgZW4gZWwgaW5pY2lvIGRlIHNlc2nDs24geSBxdWUgbG8gaW50ZW50YXLDoSBkZSBudWV2byBtw6FzIHRhcmRlLS0-QVxuICAgIEEtLVVzdWFyaW8gZGVjaWRlIGNhbmNlbGFyIGVsIGluaWNpbyBkZSBzZXNpw7NuLS0-SVtBcGxpY2FjacOzbiBjYW5jZWxhIGxhIG9wZXJhY2nDs24geSBtYW50aWVuZSBhbCB1c3VhcmlvIGVuIGxhIHBhbnRhbGxhIGRlIGluaWNpbyBkZSBzZXNpw7NuXVxuXG4lJSBTdHlsZXNcbiAgICBzdHlsZSBGIGZpbGw6I2NmY1xuICAgIHN0eWxlIEkgZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)
 
 ### Caso de uso: Configurar el tiempo de trabajo
 
@@ -170,28 +125,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe validar que las horas de trabajo introducidas por el usuario son válidas y están en el formato correcto.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar sus horas de trabajo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
-#### Diagrama de caso de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario inicia la edición de sus horas de trabajo]-->B((Aplicación))
-    B--Solicita la información requerida-->C{Usuario introduce la información}
-
-    %% Main success scenario
-    C--Introduce las horas de trabajo en el formato correcto-->D((Aplicación))
-    D--Registra las nuevas horas de trabajo y las añade al perfil del usuario-->E[Aplicación muestra al usuario la confirmación de que las horas de trabajo se han actualizado]
-
-    %% Alternative scenarios
-    C--Usuario cancela la edición-->F[Aplicación cancela la operación y muestra la configuración del perfil del usuario sin cambios]
-    C--Introduce un formato incorrecto de horas de trabajo-->G[Aplicación solicita de nuevo la información, especificando el formato correcto de las horas de trabajo]
-    G--Usuario introduce las horas de trabajo en el formato correcto-->D
-    G--Usuario abandona la operación-->F
-
-    %% Styles
-    style E fill:#cfc
-    style F fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGluaWNpYSBsYSBlZGljacOzbiBkZSBzdXMgaG9yYXMgZGUgdHJhYmFqb10tLT5CKChBcGxpY2FjacOzbikpXG4gICAgQi0tU29saWNpdGEgbGEgaW5mb3JtYWNpw7NuIHJlcXVlcmlkYS0tPkN7VXN1YXJpbyBpbnRyb2R1Y2UgbGEgaW5mb3JtYWNpw7NufVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tSW50cm9kdWNlIGxhcyBob3JhcyBkZSB0cmFiYWpvIGVuIGVsIGZvcm1hdG8gY29ycmVjdG8tLT5EKChBcGxpY2FjacOzbikpXG4gICAgRC0tUmVnaXN0cmEgbGFzIG51ZXZhcyBob3JhcyBkZSB0cmFiYWpvIHkgbGFzIGHDsWFkZSBhbCBwZXJmaWwgZGVsIHVzdWFyaW8tLT5FW0FwbGljYWNpw7NuIG11ZXN0cmEgYWwgdXN1YXJpbyBsYSBjb25maXJtYWNpw7NuIGRlIHF1ZSBsYXMgaG9yYXMgZGUgdHJhYmFqbyBzZSBoYW4gYWN0dWFsaXphZG9dXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgZWRpY2nDs24tLT5GW0FwbGljYWNpw7NuIGNhbmNlbGEgbGEgb3BlcmFjacOzbiB5IG11ZXN0cmEgbGEgY29uZmlndXJhY2nDs24gZGVsIHBlcmZpbCBkZWwgdXN1YXJpbyBzaW4gY2FtYmlvc11cbiAgICBDLS1JbnRyb2R1Y2UgdW4gZm9ybWF0byBpbmNvcnJlY3RvIGRlIGhvcmFzIGRlIHRyYWJham8tLT5HW0FwbGljYWNpw7NuIHNvbGljaXRhIGRlIG51ZXZvIGxhIGluZm9ybWFjacOzbiwgZXNwZWNpZmljYW5kbyBlbCBmb3JtYXRvIGNvcnJlY3RvIGRlIGxhcyBob3JhcyBkZSB0cmFiYWpvXVxuICAgIEctLVVzdWFyaW8gaW50cm9kdWNlIGxhcyBob3JhcyBkZSB0cmFiYWpvIGVuIGVsIGZvcm1hdG8gY29ycmVjdG8tLT5EXG4gICAgRy0tVXN1YXJpbyBhYmFuZG9uYSBsYSBvcGVyYWNpw7NuLS0-RlxuXG4gICAgJSUgU3R5bGVzXG4gICAgc3R5bGUgRSBmaWxsOiNjZmNcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGluaWNpYSBsYSBlZGljacOzbiBkZSBzdXMgaG9yYXMgZGUgdHJhYmFqb10tLT5CKChBcGxpY2FjacOzbikpXG4gICAgQi0tU29saWNpdGEgbGEgaW5mb3JtYWNpw7NuIHJlcXVlcmlkYS0tPkN7VXN1YXJpbyBpbnRyb2R1Y2UgbGEgaW5mb3JtYWNpw7NufVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tSW50cm9kdWNlIGxhcyBob3JhcyBkZSB0cmFiYWpvIGVuIGVsIGZvcm1hdG8gY29ycmVjdG8tLT5EKChBcGxpY2FjacOzbikpXG4gICAgRC0tUmVnaXN0cmEgbGFzIG51ZXZhcyBob3JhcyBkZSB0cmFiYWpvIHkgbGFzIGHDsWFkZSBhbCBwZXJmaWwgZGVsIHVzdWFyaW8tLT5FW0FwbGljYWNpw7NuIG11ZXN0cmEgYWwgdXN1YXJpbyBsYSBjb25maXJtYWNpw7NuIGRlIHF1ZSBsYXMgaG9yYXMgZGUgdHJhYmFqbyBzZSBoYW4gYWN0dWFsaXphZG9dXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgZWRpY2nDs24tLT5GW0FwbGljYWNpw7NuIGNhbmNlbGEgbGEgb3BlcmFjacOzbiB5IG11ZXN0cmEgbGEgY29uZmlndXJhY2nDs24gZGVsIHBlcmZpbCBkZWwgdXN1YXJpbyBzaW4gY2FtYmlvc11cbiAgICBDLS1JbnRyb2R1Y2UgdW4gZm9ybWF0byBpbmNvcnJlY3RvIGRlIGhvcmFzIGRlIHRyYWJham8tLT5HW0FwbGljYWNpw7NuIHNvbGljaXRhIGRlIG51ZXZvIGxhIGluZm9ybWFjacOzbiwgZXNwZWNpZmljYW5kbyBlbCBmb3JtYXRvIGNvcnJlY3RvIGRlIGxhcyBob3JhcyBkZSB0cmFiYWpvXVxuICAgIEctLVVzdWFyaW8gaW50cm9kdWNlIGxhcyBob3JhcyBkZSB0cmFiYWpvIGVuIGVsIGZvcm1hdG8gY29ycmVjdG8tLT5EXG4gICAgRy0tVXN1YXJpbyBhYmFuZG9uYSBsYSBvcGVyYWNpw7NuLS0-RlxuXG4gICAgJSUgU3R5bGVzXG4gICAgc3R5bGUgRSBmaWxsOiNjZmNcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0)
 
 ### Caso de uso: Seleccionar calendarios para los cálculos
 
@@ -206,27 +142,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe poder acceder a los calendarios seleccionados por el usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar los calendarios que se utilizan para los cálculos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
-#### Diagrama de caso de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
-    B--Muestra los calendarios disponibles para seleccionar-->C{Usuario selecciona los calendarios}
-
-    %% Main success scenario
-    C--Selecciona los calendarios para los cálculos-->D((Aplicación))
-    D--Registra la elección del usuario y actualiza los calendarios-->E[Aplicación muestra confirmación de que los calendarios se han actualizado correctamente]
-
-    %% Alternative scenarios
-    C--Usuario cancela la selección-->F[Aplicación cancela la operación y mantiene la configuración de calendarios actual]
-    C--Error al actualizar los calendarios-->G[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
-
-    %% Styles
-    style E fill:#cfc
-    style F fill:#fcc
-    style G fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxvcyBjYWxlbmRhcmlvcyBkaXNwb25pYmxlcyBwYXJhIHNlbGVjY2lvbmFyLS0-Q3tVc3VhcmlvIHNlbGVjY2lvbmEgbG9zIGNhbGVuZGFyaW9zfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tU2VsZWNjaW9uYSBsb3MgY2FsZW5kYXJpb3MgcGFyYSBsb3MgY8OhbGN1bG9zLS0-RCgoQXBsaWNhY2nDs24pKVxuICAgIEQtLVJlZ2lzdHJhIGxhIGVsZWNjacOzbiBkZWwgdXN1YXJpbyB5IGFjdHVhbGl6YSBsb3MgY2FsZW5kYXJpb3MtLT5FW0FwbGljYWNpw7NuIG11ZXN0cmEgY29uZmlybWFjacOzbiBkZSBxdWUgbG9zIGNhbGVuZGFyaW9zIHNlIGhhbiBhY3R1YWxpemFkbyBjb3JyZWN0YW1lbnRlXVxuXG4gICAgJSUgQWx0ZXJuYXRpdmUgc2NlbmFyaW9zXG4gICAgQy0tVXN1YXJpbyBjYW5jZWxhIGxhIHNlbGVjY2nDs24tLT5GW0FwbGljYWNpw7NuIGNhbmNlbGEgbGEgb3BlcmFjacOzbiB5IG1hbnRpZW5lIGxhIGNvbmZpZ3VyYWNpw7NuIGRlIGNhbGVuZGFyaW9zIGFjdHVhbF1cbiAgICBDLS1FcnJvciBhbCBhY3R1YWxpemFyIGxvcyBjYWxlbmRhcmlvcy0tPkdbQXBsaWNhY2nDs24gbXVlc3RyYSB1biBtZW5zYWplIGRlIGVycm9yIHkgc29saWNpdGEgYWwgdXN1YXJpbyBxdWUgbG8gaW50ZW50ZSBkZSBudWV2byBtw6FzIHRhcmRlXVxuXG4gICAgJSUgU3R5bGVzXG4gICAgc3R5bGUgRSBmaWxsOiNjZmNcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuICAgIHN0eWxlIEcgZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxvcyBjYWxlbmRhcmlvcyBkaXNwb25pYmxlcyBwYXJhIHNlbGVjY2lvbmFyLS0-Q3tVc3VhcmlvIHNlbGVjY2lvbmEgbG9zIGNhbGVuZGFyaW9zfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tU2VsZWNjaW9uYSBsb3MgY2FsZW5kYXJpb3MgcGFyYSBsb3MgY8OhbGN1bG9zLS0-RCgoQXBsaWNhY2nDs24pKVxuICAgIEQtLVJlZ2lzdHJhIGxhIGVsZWNjacOzbiBkZWwgdXN1YXJpbyB5IGFjdHVhbGl6YSBsb3MgY2FsZW5kYXJpb3MtLT5FW0FwbGljYWNpw7NuIG11ZXN0cmEgY29uZmlybWFjacOzbiBkZSBxdWUgbG9zIGNhbGVuZGFyaW9zIHNlIGhhbiBhY3R1YWxpemFkbyBjb3JyZWN0YW1lbnRlXVxuXG4gICAgJSUgQWx0ZXJuYXRpdmUgc2NlbmFyaW9zXG4gICAgQy0tVXN1YXJpbyBjYW5jZWxhIGxhIHNlbGVjY2nDs24tLT5GW0FwbGljYWNpw7NuIGNhbmNlbGEgbGEgb3BlcmFjacOzbiB5IG1hbnRpZW5lIGxhIGNvbmZpZ3VyYWNpw7NuIGRlIGNhbGVuZGFyaW9zIGFjdHVhbF1cbiAgICBDLS1FcnJvciBhbCBhY3R1YWxpemFyIGxvcyBjYWxlbmRhcmlvcy0tPkdbQXBsaWNhY2nDs24gbXVlc3RyYSB1biBtZW5zYWplIGRlIGVycm9yIHkgc29saWNpdGEgYWwgdXN1YXJpbyBxdWUgbG8gaW50ZW50ZSBkZSBudWV2byBtw6FzIHRhcmRlXVxuXG4gICAgJSUgU3R5bGVzXG4gICAgc3R5bGUgRSBmaWxsOiNjZmNcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuICAgIHN0eWxlIEcgZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)
 
 ### Caso de uso: Seleccionar periodo temporal para los cálculos
 
@@ -241,27 +159,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe validar que el periodo temporal seleccionado por el usuario es válido.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen actualizar el periodo temporal para los cálculos.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-#### Diagrama de caso de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
-    B--Muestra las opciones de periodo temporal para seleccionar-->C{Usuario selecciona el periodo temporal}
-
-    %% Main success scenario
-    C--Selecciona el periodo temporal para los cálculos-->D((Aplicación))
-    D--Registra la elección del usuario y actualiza el periodo temporal-->E[Aplicación muestra confirmación de que el periodo temporal se ha actualizado correctamente]
-
-    %% Alternative scenarios
-    C--Usuario cancela la selección-->F[Aplicación cancela la operación y mantiene la configuración de periodo temporal actual]
-    C--Error al actualizar el periodo temporal-->G[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
-
-    %% Styles
-    style E fill:#cfc
-    style F fill:#fcc
-    style G fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxhcyBvcGNpb25lcyBkZSBwZXJpb2RvIHRlbXBvcmFsIHBhcmEgc2VsZWNjaW9uYXItLT5De1VzdWFyaW8gc2VsZWNjaW9uYSBlbCBwZXJpb2RvIHRlbXBvcmFsfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tU2VsZWNjaW9uYSBlbCBwZXJpb2RvIHRlbXBvcmFsIHBhcmEgbG9zIGPDoWxjdWxvcy0tPkQoKEFwbGljYWNpw7NuKSlcbiAgICBELS1SZWdpc3RyYSBsYSBlbGVjY2nDs24gZGVsIHVzdWFyaW8geSBhY3R1YWxpemEgZWwgcGVyaW9kbyB0ZW1wb3JhbC0tPkVbQXBsaWNhY2nDs24gbXVlc3RyYSBjb25maXJtYWNpw7NuIGRlIHF1ZSBlbCBwZXJpb2RvIHRlbXBvcmFsIHNlIGhhIGFjdHVhbGl6YWRvIGNvcnJlY3RhbWVudGVdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgc2VsZWNjacOzbi0tPkZbQXBsaWNhY2nDs24gY2FuY2VsYSBsYSBvcGVyYWNpw7NuIHkgbWFudGllbmUgbGEgY29uZmlndXJhY2nDs24gZGUgcGVyaW9kbyB0ZW1wb3JhbCBhY3R1YWxdXG4gICAgQy0tRXJyb3IgYWwgYWN0dWFsaXphciBlbCBwZXJpb2RvIHRlbXBvcmFsLS0-R1tBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3IgeSBzb2xpY2l0YSBhbCB1c3VhcmlvIHF1ZSBsbyBpbnRlbnRlIGRlIG51ZXZvIG3DoXMgdGFyZGVdXG5cbiAgICAlJSBTdHlsZXNcbiAgICBzdHlsZSBFIGZpbGw6I2NmY1xuICAgIHN0eWxlIEYgZmlsbDojZmNjXG4gICAgc3R5bGUgRyBmaWxsOiNmY2NcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxhcyBvcGNpb25lcyBkZSBwZXJpb2RvIHRlbXBvcmFsIHBhcmEgc2VsZWNjaW9uYXItLT5De1VzdWFyaW8gc2VsZWNjaW9uYSBlbCBwZXJpb2RvIHRlbXBvcmFsfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tU2VsZWNjaW9uYSBlbCBwZXJpb2RvIHRlbXBvcmFsIHBhcmEgbG9zIGPDoWxjdWxvcy0tPkQoKEFwbGljYWNpw7NuKSlcbiAgICBELS1SZWdpc3RyYSBsYSBlbGVjY2nDs24gZGVsIHVzdWFyaW8geSBhY3R1YWxpemEgZWwgcGVyaW9kbyB0ZW1wb3JhbC0tPkVbQXBsaWNhY2nDs24gbXVlc3RyYSBjb25maXJtYWNpw7NuIGRlIHF1ZSBlbCBwZXJpb2RvIHRlbXBvcmFsIHNlIGhhIGFjdHVhbGl6YWRvIGNvcnJlY3RhbWVudGVdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgc2VsZWNjacOzbi0tPkZbQXBsaWNhY2nDs24gY2FuY2VsYSBsYSBvcGVyYWNpw7NuIHkgbWFudGllbmUgbGEgY29uZmlndXJhY2nDs24gZGUgcGVyaW9kbyB0ZW1wb3JhbCBhY3R1YWxdXG4gICAgQy0tRXJyb3IgYWwgYWN0dWFsaXphciBlbCBwZXJpb2RvIHRlbXBvcmFsLS0-R1tBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3IgeSBzb2xpY2l0YSBhbCB1c3VhcmlvIHF1ZSBsbyBpbnRlbnRlIGRlIG51ZXZvIG3DoXMgdGFyZGVdXG5cbiAgICAlJSBTdHlsZXNcbiAgICBzdHlsZSBFIGZpbGw6I2NmY1xuICAgIHN0eWxlIEYgZmlsbDojZmNjXG4gICAgc3R5bGUgRyBmaWxsOiNmY2NcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
 ### Caso de uso: Ver el tiempo gastado en reuniones
 
@@ -276,26 +176,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe ser capaz de calcular el tiempo gastado en reuniones basándose en los datos del calendario del usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen ver el tiempo gastado en reuniones.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
-#### Diagrama de caso de uso
+#### Diagrama de actividad
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
-    B--Recopila y calcula el tiempo total gastado en reuniones-->C{Aplicación muestra el tiempo gastado en reuniones}
-
-    %% Main success scenario
-    C--Muestra el tiempo gastado en reuniones en formato de texto y en una gráfica-->D[Usuario ve el tiempo gastado en reuniones]
-
-    %% Alternative scenarios
-    C--No hay datos de reuniones disponibles-->E[Aplicación muestra un mensaje informando la falta de datos]
-    C--Error al recopilar o procesar los datos-->F[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
-
-    %% Styles
-    style D fill:#cfc
-    style E fill:#fcc
-    style F fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgdmlzdWFsaXphY2nDs24gZGUgZGF0b3NdLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLVJlY29waWxhIHkgY2FsY3VsYSBlbCB0aWVtcG8gdG90YWwgZ2FzdGFkbyBlbiByZXVuaW9uZXMtLT5De0FwbGljYWNpw7NuIG11ZXN0cmEgZWwgdGllbXBvIGdhc3RhZG8gZW4gcmV1bmlvbmVzfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tTXVlc3RyYSBlbCB0aWVtcG8gZ2FzdGFkbyBlbiByZXVuaW9uZXMgZW4gZm9ybWF0byBkZSB0ZXh0byB5IGVuIHVuYSBncsOhZmljYS0tPkRbVXN1YXJpbyB2ZSBlbCB0aWVtcG8gZ2FzdGFkbyBlbiByZXVuaW9uZXNdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1ObyBoYXkgZGF0b3MgZGUgcmV1bmlvbmVzIGRpc3BvbmlibGVzLS0-RVtBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgaW5mb3JtYW5kbyBsYSBmYWx0YSBkZSBkYXRvc11cbiAgICBDLS1FcnJvciBhbCByZWNvcGlsYXIgbyBwcm9jZXNhciBsb3MgZGF0b3MtLT5GW0FwbGljYWNpw7NuIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvciB5IHNvbGljaXRhIGFsIHVzdWFyaW8gcXVlIGxvIGludGVudGUgZGUgbnVldm8gbcOhcyB0YXJkZV1cblxuICAgICUlIFN0eWxlc1xuICAgIHN0eWxlIEQgZmlsbDojY2ZjXG4gICAgc3R5bGUgRSBmaWxsOiNmY2NcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgdmlzdWFsaXphY2nDs24gZGUgZGF0b3NdLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLVJlY29waWxhIHkgY2FsY3VsYSBlbCB0aWVtcG8gdG90YWwgZ2FzdGFkbyBlbiByZXVuaW9uZXMtLT5De0FwbGljYWNpw7NuIG11ZXN0cmEgZWwgdGllbXBvIGdhc3RhZG8gZW4gcmV1bmlvbmVzfVxuXG4gICAgJSUgTWFpbiBzdWNjZXNzIHNjZW5hcmlvXG4gICAgQy0tTXVlc3RyYSBlbCB0aWVtcG8gZ2FzdGFkbyBlbiByZXVuaW9uZXMgZW4gZm9ybWF0byBkZSB0ZXh0byB5IGVuIHVuYSBncsOhZmljYS0tPkRbVXN1YXJpbyB2ZSBlbCB0aWVtcG8gZ2FzdGFkbyBlbiByZXVuaW9uZXNdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1ObyBoYXkgZGF0b3MgZGUgcmV1bmlvbmVzIGRpc3BvbmlibGVzLS0-RVtBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgaW5mb3JtYW5kbyBsYSBmYWx0YSBkZSBkYXRvc11cbiAgICBDLS1FcnJvciBhbCByZWNvcGlsYXIgbyBwcm9jZXNhciBsb3MgZGF0b3MtLT5GW0FwbGljYWNpw7NuIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvciB5IHNvbGljaXRhIGFsIHVzdWFyaW8gcXVlIGxvIGludGVudGUgZGUgbnVldm8gbcOhcyB0YXJkZV1cblxuICAgICUlIFN0eWxlc1xuICAgIHN0eWxlIEQgZmlsbDojY2ZjXG4gICAgc3R5bGUgRSBmaWxsOiNmY2NcbiAgICBzdHlsZSBGIGZpbGw6I2ZjY1xuIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0)
 
 ### Caso de uso: Ver el porcentaje de tiempo gastado en reuniones y tiempo libre
 
@@ -310,26 +193,9 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe ser capaz de calcular el porcentaje de tiempo gastado en reuniones y el tiempo libre basándose en los datos del calendario del usuario.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen ver el porcentaje de tiempo gastado en reuniones y el tiempo libre.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
-#### Diagrama de caso de uso:
+#### Diagrama de actividad:
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario accede a la página de visualización de datos]-->B((Aplicación))
-    B--Recopila y calcula el porcentaje de tiempo gastado en reuniones y tiempo libre-->C{Aplicación muestra los porcentajes}
-
-    %% Main success scenario
-    C--Muestra los porcentajes en formato de texto y en una gráfica-->D[Usuario ve el porcentaje de tiempo gastado en reuniones y tiempo libre]
-
-    %% Alternative scenarios
-    C--No hay datos de reuniones disponibles-->E[Aplicación muestra un mensaje informando la falta de datos]
-    C--Error al recopilar o procesar los datos-->F[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
-
-    %% Styles
-    style D fill:#cfc
-    style E fill:#fcc
-    style F fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgdmlzdWFsaXphY2nDs24gZGUgZGF0b3NdLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLVJlY29waWxhIHkgY2FsY3VsYSBlbCBwb3JjZW50YWplIGRlIHRpZW1wbyBnYXN0YWRvIGVuIHJldW5pb25lcyB5IHRpZW1wbyBsaWJyZS0tPkN7QXBsaWNhY2nDs24gbXVlc3RyYSBsb3MgcG9yY2VudGFqZXN9XG5cbiAgICAlJSBNYWluIHN1Y2Nlc3Mgc2NlbmFyaW9cbiAgICBDLS1NdWVzdHJhIGxvcyBwb3JjZW50YWplcyBlbiBmb3JtYXRvIGRlIHRleHRvIHkgZW4gdW5hIGdyw6FmaWNhLS0-RFtVc3VhcmlvIHZlIGVsIHBvcmNlbnRhamUgZGUgdGllbXBvIGdhc3RhZG8gZW4gcmV1bmlvbmVzIHkgdGllbXBvIGxpYnJlXVxuXG4gICAgJSUgQWx0ZXJuYXRpdmUgc2NlbmFyaW9zXG4gICAgQy0tTm8gaGF5IGRhdG9zIGRlIHJldW5pb25lcyBkaXNwb25pYmxlcy0tPkVbQXBsaWNhY2nDs24gbXVlc3RyYSB1biBtZW5zYWplIGluZm9ybWFuZG8gbGEgZmFsdGEgZGUgZGF0b3NdXG4gICAgQy0tRXJyb3IgYWwgcmVjb3BpbGFyIG8gcHJvY2VzYXIgbG9zIGRhdG9zLS0-RltBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3IgeSBzb2xpY2l0YSBhbCB1c3VhcmlvIHF1ZSBsbyBpbnRlbnRlIGRlIG51ZXZvIG3DoXMgdGFyZGVdXG5cbiAgICAlJSBTdHlsZXNcbiAgICBzdHlsZSBEIGZpbGw6I2NmY1xuICAgIHN0eWxlIEUgZmlsbDojZmNjXG4gICAgc3R5bGUgRiBmaWxsOiNmY2NcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgdmlzdWFsaXphY2nDs24gZGUgZGF0b3NdLS0-QigoQXBsaWNhY2nDs24pKVxuICAgIEItLVJlY29waWxhIHkgY2FsY3VsYSBlbCBwb3JjZW50YWplIGRlIHRpZW1wbyBnYXN0YWRvIGVuIHJldW5pb25lcyB5IHRpZW1wbyBsaWJyZS0tPkN7QXBsaWNhY2nDs24gbXVlc3RyYSBsb3MgcG9yY2VudGFqZXN9XG5cbiAgICAlJSBNYWluIHN1Y2Nlc3Mgc2NlbmFyaW9cbiAgICBDLS1NdWVzdHJhIGxvcyBwb3JjZW50YWplcyBlbiBmb3JtYXRvIGRlIHRleHRvIHkgZW4gdW5hIGdyw6FmaWNhLS0-RFtVc3VhcmlvIHZlIGVsIHBvcmNlbnRhamUgZGUgdGllbXBvIGdhc3RhZG8gZW4gcmV1bmlvbmVzIHkgdGllbXBvIGxpYnJlXVxuXG4gICAgJSUgQWx0ZXJuYXRpdmUgc2NlbmFyaW9zXG4gICAgQy0tTm8gaGF5IGRhdG9zIGRlIHJldW5pb25lcyBkaXNwb25pYmxlcy0tPkVbQXBsaWNhY2nDs24gbXVlc3RyYSB1biBtZW5zYWplIGluZm9ybWFuZG8gbGEgZmFsdGEgZGUgZGF0b3NdXG4gICAgQy0tRXJyb3IgYWwgcmVjb3BpbGFyIG8gcHJvY2VzYXIgbG9zIGRhdG9zLS0-RltBcGxpY2FjacOzbiBtdWVzdHJhIHVuIG1lbnNhamUgZGUgZXJyb3IgeSBzb2xpY2l0YSBhbCB1c3VhcmlvIHF1ZSBsbyBpbnRlbnRlIGRlIG51ZXZvIG3DoXMgdGFyZGVdXG5cbiAgICAlJSBTdHlsZXNcbiAgICBzdHlsZSBEIGZpbGw6I2NmY1xuICAgIHN0eWxlIEUgZmlsbDojZmNjXG4gICAgc3R5bGUgRiBmaWxsOiNmY2NcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In19)
 
 ### Caso de uso: Configurar el tiempo entre reuniones que cuenta como tiempo de reunión
 
@@ -344,76 +210,14 @@ flowchart TD
 | **Requisitos especiales**        | La aplicación debe validar que el tiempo entre reuniones introducido por el usuario es válido y está en el formato correcto.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Frecuencia de ocurrencia**     | Puede ocurrir varias veces al día, dependiendo de cuántos usuarios deseen configurar el tiempo entre reuniones que cuenta como tiempo de reunión.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
-#### Diagrama de caso de uso:
+#### Diagrama de actividad:
 
-```mermaid 
-flowchart TD
-    %% Trigger event
-    A[Usuario accede a la página de configuración de su perfil]-->B((Aplicación))
-    B--Muestra las opciones para configurar el tiempo entre reuniones-->C{Usuario selecciona el intervalo}
-
-    %% Main success scenario
-    C--Indica que quiere configurar este tiempo-->D((Aplicación))
-    D--Registra la nueva configuración y actualiza el perfil del usuario-->E[Usuario ve la confirmación de que la configuración ha sido actualizada]
-
-    %% Alternative scenarios
-    C--Usuario cancela la edición-->F[Aplicación muestra la configuración del perfil del usuario sin cambios]
-    C--Usuario introduce un formato incorrecto de intervalo de tiempo-->G[Aplicación solicita de nuevo la información, especificando el formato correcto del intervalo de tiempo]
-    D--Error al procesar la nueva configuración-->H[Aplicación muestra un mensaje de error y solicita al usuario que lo intente de nuevo más tarde]
-
-    %% Styles
-    style E fill:#cfc
-    style F fill:#fcc
-    style G fill:#fcc
-    style H fill:#fcc
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxhcyBvcGNpb25lcyBwYXJhIGNvbmZpZ3VyYXIgZWwgdGllbXBvIGVudHJlIHJldW5pb25lcy0tPkN7VXN1YXJpbyBzZWxlY2Npb25hIGVsIGludGVydmFsb31cblxuICAgICUlIE1haW4gc3VjY2VzcyBzY2VuYXJpb1xuICAgIEMtLUluZGljYSBxdWUgcXVpZXJlIGNvbmZpZ3VyYXIgZXN0ZSB0aWVtcG8tLT5EKChBcGxpY2FjacOzbikpXG4gICAgRC0tUmVnaXN0cmEgbGEgbnVldmEgY29uZmlndXJhY2nDs24geSBhY3R1YWxpemEgZWwgcGVyZmlsIGRlbCB1c3VhcmlvLS0-RVtVc3VhcmlvIHZlIGxhIGNvbmZpcm1hY2nDs24gZGUgcXVlIGxhIGNvbmZpZ3VyYWNpw7NuIGhhIHNpZG8gYWN0dWFsaXphZGFdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgZWRpY2nDs24tLT5GW0FwbGljYWNpw7NuIG11ZXN0cmEgbGEgY29uZmlndXJhY2nDs24gZGVsIHBlcmZpbCBkZWwgdXN1YXJpbyBzaW4gY2FtYmlvc11cbiAgICBDLS1Vc3VhcmlvIGludHJvZHVjZSB1biBmb3JtYXRvIGluY29ycmVjdG8gZGUgaW50ZXJ2YWxvIGRlIHRpZW1wby0tPkdbQXBsaWNhY2nDs24gc29saWNpdGEgZGUgbnVldm8gbGEgaW5mb3JtYWNpw7NuLCBlc3BlY2lmaWNhbmRvIGVsIGZvcm1hdG8gY29ycmVjdG8gZGVsIGludGVydmFsbyBkZSB0aWVtcG9dXG4gICAgRC0tRXJyb3IgYWwgcHJvY2VzYXIgbGEgbnVldmEgY29uZmlndXJhY2nDs24tLT5IW0FwbGljYWNpw7NuIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvciB5IHNvbGljaXRhIGFsIHVzdWFyaW8gcXVlIGxvIGludGVudGUgZGUgbnVldm8gbcOhcyB0YXJkZV1cblxuICAgICUlIFN0eWxlc1xuICAgIHN0eWxlIEUgZmlsbDojY2ZjXG4gICAgc3R5bGUgRiBmaWxsOiNmY2NcbiAgICBzdHlsZSBHIGZpbGw6I2ZjY1xuICAgIHN0eWxlIEggZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbiAgICAlJSBUcmlnZ2VyIGV2ZW50XG4gICAgQVtVc3VhcmlvIGFjY2VkZSBhIGxhIHDDoWdpbmEgZGUgY29uZmlndXJhY2nDs24gZGUgc3UgcGVyZmlsXS0tPkIoKEFwbGljYWNpw7NuKSlcbiAgICBCLS1NdWVzdHJhIGxhcyBvcGNpb25lcyBwYXJhIGNvbmZpZ3VyYXIgZWwgdGllbXBvIGVudHJlIHJldW5pb25lcy0tPkN7VXN1YXJpbyBzZWxlY2Npb25hIGVsIGludGVydmFsb31cblxuICAgICUlIE1haW4gc3VjY2VzcyBzY2VuYXJpb1xuICAgIEMtLUluZGljYSBxdWUgcXVpZXJlIGNvbmZpZ3VyYXIgZXN0ZSB0aWVtcG8tLT5EKChBcGxpY2FjacOzbikpXG4gICAgRC0tUmVnaXN0cmEgbGEgbnVldmEgY29uZmlndXJhY2nDs24geSBhY3R1YWxpemEgZWwgcGVyZmlsIGRlbCB1c3VhcmlvLS0-RVtVc3VhcmlvIHZlIGxhIGNvbmZpcm1hY2nDs24gZGUgcXVlIGxhIGNvbmZpZ3VyYWNpw7NuIGhhIHNpZG8gYWN0dWFsaXphZGFdXG5cbiAgICAlJSBBbHRlcm5hdGl2ZSBzY2VuYXJpb3NcbiAgICBDLS1Vc3VhcmlvIGNhbmNlbGEgbGEgZWRpY2nDs24tLT5GW0FwbGljYWNpw7NuIG11ZXN0cmEgbGEgY29uZmlndXJhY2nDs24gZGVsIHBlcmZpbCBkZWwgdXN1YXJpbyBzaW4gY2FtYmlvc11cbiAgICBDLS1Vc3VhcmlvIGludHJvZHVjZSB1biBmb3JtYXRvIGluY29ycmVjdG8gZGUgaW50ZXJ2YWxvIGRlIHRpZW1wby0tPkdbQXBsaWNhY2nDs24gc29saWNpdGEgZGUgbnVldm8gbGEgaW5mb3JtYWNpw7NuLCBlc3BlY2lmaWNhbmRvIGVsIGZvcm1hdG8gY29ycmVjdG8gZGVsIGludGVydmFsbyBkZSB0aWVtcG9dXG4gICAgRC0tRXJyb3IgYWwgcHJvY2VzYXIgbGEgbnVldmEgY29uZmlndXJhY2nDs24tLT5IW0FwbGljYWNpw7NuIG11ZXN0cmEgdW4gbWVuc2FqZSBkZSBlcnJvciB5IHNvbGljaXRhIGFsIHVzdWFyaW8gcXVlIGxvIGludGVudGUgZGUgbnVldm8gbcOhcyB0YXJkZV1cblxuICAgICUlIFN0eWxlc1xuICAgIHN0eWxlIEUgZmlsbDojY2ZjXG4gICAgc3R5bGUgRiBmaWxsOiNmY2NcbiAgICBzdHlsZSBHIGZpbGw6I2ZjY1xuICAgIHN0eWxlIEggZmlsbDojZmNjXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)
 
 ## Analisis del modelo
 ### Diagrama de clases
 
-```mermaid 
-classDiagram
-   class Usuario {
-      +iniciarSesion()
-      +configurarPerfil()
-      +verDatos()
-   }
-
-   class GoogleAPI {
-      +validarUsuario()
-      +obtenerCalendarios()
-   }
-
-   class Aplicación {
-      +mostrarDatos()
-      +validarUsuario()
-      +actualizarDatos()
-      +realizarAnalisis()
-   }
-
-   class DatosUsuario {
-      -perfilUsuario : Perfil
-      -configuraciones : Configuración
-   }
-
-   class Perfil {
-      -nombre : String
-      -email : String
-   }
-
-   class Configuración {
-      -horasTrabajo : Int
-      -calendariosSeleccionados : String[]
-      -periodoTemporal : String
-   }
-
-   Usuario "*" -- "*" Aplicación : usa
-   Aplicación "1" -- "1" GoogleAPI : maneja
-   Aplicación "1" o-- "*" DatosUsuario : contiene
-   DatosUsuario "1" -- "1" Perfil : tiene
-   DatosUsuario "1" -- "1" Configuración : tiene
-
-```
+[![](https://mermaid.ink/img/eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICBjbGFzcyBVc3VhcmlvIHtcbiAgICAgICtpbmljaWFyU2VzaW9uKClcbiAgICAgICtjb25maWd1cmFyUGVyZmlsKClcbiAgICAgICt2ZXJEYXRvcygpXG4gICB9XG5cbiAgIGNsYXNzIEdvb2dsZUFQSSB7XG4gICAgICArdmFsaWRhclVzdWFyaW8oKVxuICAgICAgK29idGVuZXJDYWxlbmRhcmlvcygpXG4gICB9XG5cbiAgIGNsYXNzIEFwbGljYWNpw7NuIHtcbiAgICAgICttb3N0cmFyRGF0b3MoKVxuICAgICAgK3ZhbGlkYXJVc3VhcmlvKClcbiAgICAgICthY3R1YWxpemFyRGF0b3MoKVxuICAgICAgK3JlYWxpemFyQW5hbGlzaXMoKVxuICAgfVxuXG4gICBjbGFzcyBEYXRvc1VzdWFyaW8ge1xuICAgICAgLXBlcmZpbFVzdWFyaW8gOiBQZXJmaWxcbiAgICAgIC1jb25maWd1cmFjaW9uZXMgOiBDb25maWd1cmFjacOzblxuICAgfVxuXG4gICBjbGFzcyBQZXJmaWwge1xuICAgICAgLW5vbWJyZSA6IFN0cmluZ1xuICAgICAgLWVtYWlsIDogU3RyaW5nXG4gICB9XG5cbiAgIGNsYXNzIENvbmZpZ3VyYWNpw7NuIHtcbiAgICAgIC1ob3Jhc1RyYWJham8gOiBJbnRcbiAgICAgIC1jYWxlbmRhcmlvc1NlbGVjY2lvbmFkb3MgOiBTdHJpbmdbXVxuICAgICAgLXBlcmlvZG9UZW1wb3JhbCA6IFN0cmluZ1xuICAgfVxuXG4gICBVc3VhcmlvIFwiKlwiIC0tIFwiKlwiIEFwbGljYWNpw7NuIDogdXNhXG4gICBBcGxpY2FjacOzbiBcIjFcIiAtLSBcIjFcIiBHb29nbGVBUEkgOiBtYW5lamFcbiAgIEFwbGljYWNpw7NuIFwiMVwiIG8tLSBcIipcIiBEYXRvc1VzdWFyaW8gOiBjb250aWVuZVxuICAgRGF0b3NVc3VhcmlvIFwiMVwiIC0tIFwiMVwiIFBlcmZpbCA6IHRpZW5lXG4gICBEYXRvc1VzdWFyaW8gXCIxXCIgLS0gXCIxXCIgQ29uZmlndXJhY2nDs24gOiB0aWVuZVxuXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiY2xhc3NEaWFncmFtXG4gICBjbGFzcyBVc3VhcmlvIHtcbiAgICAgICtpbmljaWFyU2VzaW9uKClcbiAgICAgICtjb25maWd1cmFyUGVyZmlsKClcbiAgICAgICt2ZXJEYXRvcygpXG4gICB9XG5cbiAgIGNsYXNzIEdvb2dsZUFQSSB7XG4gICAgICArdmFsaWRhclVzdWFyaW8oKVxuICAgICAgK29idGVuZXJDYWxlbmRhcmlvcygpXG4gICB9XG5cbiAgIGNsYXNzIEFwbGljYWNpw7NuIHtcbiAgICAgICttb3N0cmFyRGF0b3MoKVxuICAgICAgK3ZhbGlkYXJVc3VhcmlvKClcbiAgICAgICthY3R1YWxpemFyRGF0b3MoKVxuICAgICAgK3JlYWxpemFyQW5hbGlzaXMoKVxuICAgfVxuXG4gICBjbGFzcyBEYXRvc1VzdWFyaW8ge1xuICAgICAgLXBlcmZpbFVzdWFyaW8gOiBQZXJmaWxcbiAgICAgIC1jb25maWd1cmFjaW9uZXMgOiBDb25maWd1cmFjacOzblxuICAgfVxuXG4gICBjbGFzcyBQZXJmaWwge1xuICAgICAgLW5vbWJyZSA6IFN0cmluZ1xuICAgICAgLWVtYWlsIDogU3RyaW5nXG4gICB9XG5cbiAgIGNsYXNzIENvbmZpZ3VyYWNpw7NuIHtcbiAgICAgIC1ob3Jhc1RyYWJham8gOiBJbnRcbiAgICAgIC1jYWxlbmRhcmlvc1NlbGVjY2lvbmFkb3MgOiBTdHJpbmdbXVxuICAgICAgLXBlcmlvZG9UZW1wb3JhbCA6IFN0cmluZ1xuICAgfVxuXG4gICBVc3VhcmlvIFwiKlwiIC0tIFwiKlwiIEFwbGljYWNpw7NuIDogdXNhXG4gICBBcGxpY2FjacOzbiBcIjFcIiAtLSBcIjFcIiBHb29nbGVBUEkgOiBtYW5lamFcbiAgIEFwbGljYWNpw7NuIFwiMVwiIG8tLSBcIipcIiBEYXRvc1VzdWFyaW8gOiBjb250aWVuZVxuICAgRGF0b3NVc3VhcmlvIFwiMVwiIC0tIFwiMVwiIFBlcmZpbCA6IHRpZW5lXG4gICBEYXRvc1VzdWFyaW8gXCIxXCIgLS0gXCIxXCIgQ29uZmlndXJhY2nDs24gOiB0aWVuZVxuXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)
 
 ### Descripción de las clases
 
