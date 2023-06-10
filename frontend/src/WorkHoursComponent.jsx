@@ -32,7 +32,7 @@ function WorkHoursComponent() {
             loadTimeAnalysisData();
         }
         setIsLoading(false);
-    }, [user, navigate, loadTimeAnalysisData]);
+    }, [user, navigate]);
 
     const [timeAnalysisData, setTimeAnalysisData] = useState(null);
     const [tableData, setTableData] = useState([]);
@@ -67,7 +67,7 @@ function WorkHoursComponent() {
             // Filtrar los datos para eliminar elementos con valor 0
             setPieChartData(tableData.filter((item) => item.value !== 0));
         }
-    }, [tableData, timeAnalysisData]);
+    }, [timeAnalysisData])
 
     const isMobile = useMediaQuery('(max-width:500px)');
     const colors = ['#c56161', '#ffd54f', '#b39ddb', '#4de192'];
