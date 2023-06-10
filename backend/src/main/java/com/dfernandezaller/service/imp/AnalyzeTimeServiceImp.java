@@ -52,7 +52,7 @@ public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
     }
 
     private List<Meeting> getMeetings(UserDTO user, LocalDate startDate, LocalDate endDate) {
-        return calendarService.getCalendarMeetings(user.calendarId(), startDate, endDate);
+        return calendarService.getCalendarMeetings(user, startDate, endDate);
     }
 
     private double calculateWorkedDays(LocalDate startDate, LocalDate endDate) {

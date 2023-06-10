@@ -1,6 +1,7 @@
 package com.dfernandezaller.service.imp;
 
 import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.model.Meeting;
 import com.dfernandezaller.service.CalendarService;
@@ -35,11 +36,11 @@ public class GoogleCalendarService implements CalendarService {
         this.googleAuthorizationCodeFlowFactory = googleAuthorizationCodeFlowFactory;
     }
 
-    public List<Meeting> getCalendarMeetings(String calendarId, LocalDate startDate, LocalDate endDate) {
+    public List<Meeting> getCalendarMeetings(UserDTO user, LocalDate startDate, LocalDate endDate) {
         Events events;
         try {
-            Calendar service = getCalendarService();
-            events = service.events().list(calendarId)
+            Calendar service = getCalendarService(user.email());
+            events = service.events().list(user.calendarId())
                     .setTimeMin(new DateTime(startDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
                     .setTimeMax(new DateTime(endDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
                     .setOrderBy("startTime")
@@ -55,7 +56,7 @@ public class GoogleCalendarService implements CalendarService {
                 .toList();
     }
 
-    private Calendar getCalendarService() throws IOException {
+    private Calendar getCalendarService(String userEmail) throws IOException {
         final NetHttpTransport httpTransport;
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -63,8 +64,7 @@ public class GoogleCalendarService implements CalendarService {
             throw new BusinessException("Error occurred when trying to create a secured HTTP connection with Google", e);
         }
         return new Calendar.Builder(httpTransport, JSON_FACTORY,
-                googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow()
-                        .loadCredential("danixe.ferna@gmail.com"))
+                googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow().loadCredential(userEmail))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
