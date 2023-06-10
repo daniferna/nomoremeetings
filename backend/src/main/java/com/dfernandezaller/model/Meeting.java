@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 @Serdeable
 @Builder(toBuilder = true)
 public record Meeting(MeetingType type, @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
-                      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
+                      @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime, boolean isAllDay) {
 }

@@ -20,12 +20,14 @@ public class MeetingDay {
     public Meeting[] getBusyMeetings() {
         return meetings.stream()
                 .filter(meeting -> meeting.type().equals(MeetingType.ACCEPTED))
+                .filter(meeting -> !meeting.isAllDay())
                 .toArray(Meeting[]::new);
     }
 
     public Meeting[] getTentativeMeetings() {
         return meetings.stream()
                 .filter(meeting -> meeting.type().equals(MeetingType.TENTATIVE))
+                .filter(meeting -> !meeting.isAllDay())
                 .toArray(Meeting[]::new);
     }
 
