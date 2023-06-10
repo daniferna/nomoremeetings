@@ -8,6 +8,8 @@ import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Singleton;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.Map;
 @Singleton
 public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleAuthenticationProvider.class);
     private final GoogleTokenVerifier verifier;
     private final GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory;
 
@@ -31,15 +34,27 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
                 var result = verifier.verify((String) authenticationRequest.getSecret());
                 if (result.isValid()) {
                     var authorizationCodeFlow = googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow();
-                    var googleUserData = authorizationCodeFlow.getCredentialDataStore().get(result.getPayload().getEmail());
 
-                    if (googleUserData == null) {
+                    var userCredentials = authorizationCodeFlow.loadCredential(result.getPayload().getEmail());
+                    if (userCredentials == null) {
                         emitter.next(AuthenticationResponse.failure(AuthenticationFailureReason.USER_NOT_FOUND));
                         return;
                     }
 
+                    //Check if token is outdated
+                    var accessToken = userCredentials.getAccessToken();
+                    if (accessToken == null) {
+                        LOG.debug("Access token is null for user {}", result.getPayload().getEmail());
+                        var refreshResult = userCredentials.refreshToken();
+                        if (!refreshResult) {
+                            LOG.warn("Refresh token failed for user {}", result.getPayload().getEmail());
+                            emitter.next(AuthenticationResponse.failure(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH));
+                            return;
+                        }
+                    }
+
                     emitter.next(AuthenticationResponse.success(result.getPayload().getEmail(),
-                            Map.of("accessToken", googleUserData.getAccessToken())));
+                            Map.of("accessToken", userCredentials.getAccessToken())));
                 } else {
                     emitter.next(AuthenticationResponse.failure(result.getFailureReason()));
                 }
