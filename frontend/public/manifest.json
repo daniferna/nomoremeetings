@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "NoMoreMeetings",
+  "name": "A simple app to help you avoid meetings",
   "icons": [
     {
       "src": "favicon.ico",

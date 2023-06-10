@@ -21,7 +21,7 @@ function AppMDBNavbar() {
             <MDBContainer fluid>
                 <MDBNavbarBrand>
                     <Link className="navbarLinkBrand" to="/">
-                        <img src="/logoNoMoreMeetings.svg" loading={"lazy"} height={30}></img>
+                        <img src="/logo.svg" loading={"lazy"} height={30}></img>
                         NoMoreMeetings
                     </Link>
                 </MDBNavbarBrand>
