@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ResponsivePie} from '@nivo/pie';
 import {Link, useNavigate} from "react-router-dom";
 import {
@@ -24,22 +24,9 @@ function WorkHoursComponent() {
     const [isLoading, setIsLoading] = useState(true);
 
     const [user] = useState(JSON.parse(sessionStorage.getItem("user")));
-
-    useEffect(() => {
-        if (user === null || user === "null") {
-            navigate("/");
-        } else if (timeAnalysisData === null) {
-            loadTimeAnalysisData();
-        }
-        setIsLoading(false);
-    }, [user, navigate]);
-
     const [timeAnalysisData, setTimeAnalysisData] = useState(null);
-    const [tableData, setTableData] = useState([]);
-    const [pieChartData, setPieChartData] = useState([]);
 
-    function loadTimeAnalysisData() {
-        console.log("Asking backend for time analysis data");
+    const loadTimeAnalysisData = useCallback(() => {
         axios.get(backendHost + '/user/timeAnalysis', {
             auth: {
                 username: null,
@@ -50,7 +37,18 @@ function WorkHoursComponent() {
         }).catch((err) => {
             console.log(err);
         });
-    }
+    }, [setTimeAnalysisData, backendHost, user?.idToken]);
+
+    useEffect(() => {
+        if (user === null || user === "null") {
+            navigate("/");
+        } else if (timeAnalysisData === null) {
+            loadTimeAnalysisData();
+        }
+        setIsLoading(false);
+    }, [user, navigate, loadTimeAnalysisData, timeAnalysisData]);
+    const [tableData, setTableData] = useState([]);
+    const [pieChartData, setPieChartData] = useState([]);
 
     useEffect(() => {
         if (timeAnalysisData !== null) {
@@ -64,10 +62,15 @@ function WorkHoursComponent() {
                         timeAnalysisData.tentativeHours - timeAnalysisData.oooHours
                 },
             ]);
+        }
+    }, [timeAnalysisData, setTimeAnalysisData])
+
+    useEffect(() => {
+        if (tableData.length !== 0) {
             // Filtrar los datos para eliminar elementos con valor 0
             setPieChartData(tableData.filter((item) => item.value !== 0));
         }
-    }, [timeAnalysisData])
+    }, [tableData, setTableData])
 
     const isMobile = useMediaQuery('(max-width:500px)');
     const colors = ['#c56161', '#ffd54f', '#b39ddb', '#4de192'];
