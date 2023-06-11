@@ -4,7 +4,11 @@ micronaut:
       enabled: true
 datasources:
   default:
-    url: jdbc:tc:postgresql://localhost/test
+    url: jdbc:tc:postgresql:15-alpine3.17://localhost/test
     db-type: postgres
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
     dialect: POSTGRES
+flyway:
+  datasources:
+    default:
+      locations: classpath:/db/migration,classpath:/db/testdata
