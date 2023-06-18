@@ -30,7 +30,7 @@ public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
     private final UserService userService;
     private final CalendarService calendarService;
 
-    public AnalyzeTimeServiceImp(UserService userService, GoogleCalendarService calendarService) {
+    public AnalyzeTimeServiceImp(UserService userService, CalendarService calendarService) {
         this.userService = userService;
         this.calendarService = calendarService;
     }

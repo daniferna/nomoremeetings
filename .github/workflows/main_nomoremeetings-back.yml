@@ -24,6 +24,9 @@ jobs:
         with:
           java-version: '17'
 
+      - name: Test with Gradle
+        run: ./gradlew clean test
+
       - name: Build with Gradle
         run: ./gradlew clean assemble
 

@@ -1,0 +1,3 @@
+ - Planificacion inicial - Diagram de Gantt
+   - UnGantt tan lineal es poco creible. Siempre hay cosas que haces en parelelo, cuando menos, las pruebas al desarrollar, y la documentación. Se suele poner una tarea que te requiera un 5% de la jornada o así a documentar paralela a las otras tareas, que se quedarán con el 95% del recurso. Con las pruebas  pasa lo mismo durante el desarrollo. No pasa nada si lo dejas así, pero bueno, queda más realista de la otra forma.
+ - 

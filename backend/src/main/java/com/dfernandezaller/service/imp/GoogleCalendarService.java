@@ -12,6 +12,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Events;
+import com.google.common.annotations.VisibleForTesting;
 import io.micronaut.core.convert.ConversionService;
 import jakarta.inject.Singleton;
 
@@ -56,7 +57,8 @@ public class GoogleCalendarService implements CalendarService {
                 .toList();
     }
 
-    private Calendar getCalendarService(String userEmail) throws IOException {
+    @VisibleForTesting
+    Calendar getCalendarService(String userEmail) throws IOException {
         final NetHttpTransport httpTransport;
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();

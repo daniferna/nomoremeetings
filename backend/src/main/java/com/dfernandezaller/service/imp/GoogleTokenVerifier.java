@@ -8,6 +8,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.common.annotations.VisibleForTesting;
 import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -22,7 +23,8 @@ public class GoogleTokenVerifier implements TokenVerifier {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleTokenVerifier.class);
 
-    private final GoogleIdTokenVerifier verifier;
+    @VisibleForTesting
+    GoogleIdTokenVerifier verifier;
 
     public GoogleTokenVerifier(GoogleConfiguration googleConfiguration) {
         NetHttpTransport httpTransport = new NetHttpTransport();
