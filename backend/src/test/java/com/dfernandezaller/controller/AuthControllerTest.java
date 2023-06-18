@@ -49,7 +49,7 @@ public class AuthControllerTest {
 
         var result = authController.loginGoogle(auth);
 
-        assertThat(result.getBody().get()).isEqualTo(userDTO);
+        assertThat(result.getBody().orElseThrow()).isEqualTo(userDTO);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class AuthControllerTest {
 
         var result = authController.signupGoogle(signupData);
 
-        assertThat(result.getBody().get()).isEqualTo(userDTO);
+        assertThat(result.getBody().orElseThrow()).isEqualTo(userDTO);
     }
 
     @Test

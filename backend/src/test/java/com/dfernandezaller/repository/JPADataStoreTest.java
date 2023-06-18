@@ -124,7 +124,7 @@ public class JPADataStoreTest {
 
         jpaDataStore.set("key", testCredential);
 
-        GoogleCredential credential = googleCredentialRepository.findByKey("key").get();
+        GoogleCredential credential = googleCredentialRepository.findByKey("key").orElseThrow();
         testEntities.add(credential);
 
         assertEquals("newAccessToken", credential.getAccessToken());

@@ -52,7 +52,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetUser_userNotFound() {
+    public void testGetUserUserNotFound() {
         String username = "test";
         when(userService.getUser(username)).thenReturn(Optional.empty());
         Authentication auth = mock(Authentication.class);
@@ -76,7 +76,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUpdateUser_userNotFound() {
+    public void testUpdateUserUserNotFound() {
         String username = "test";
         UpdateUserDTO updateUserDTO = UpdateUserDTO.builder().build();
         when(userService.updateUser(username, updateUserDTO)).thenReturn(Optional.empty());

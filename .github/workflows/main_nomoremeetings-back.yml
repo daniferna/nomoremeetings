@@ -24,11 +24,8 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Test with Gradle
-        run: ./gradlew clean test
-
       - name: Build with Gradle
-        run: ./gradlew clean assemble
+        run: ./gradlew clean build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2

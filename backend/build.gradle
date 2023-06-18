@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0'
     testImplementation 'org.testcontainers:postgresql:1.18.0'
     testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.platform:junit-platform-launcher")
     testImplementation("io.micronaut.test:micronaut-test-junit5:3.9.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:{junitVersion}")
@@ -67,6 +68,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging.showStandardStreams = true
 }
 
 application {
