@@ -27,6 +27,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+      - name: Qodana Scan
+        uses: JetBrains/qodana-action@main
+        with:
+          args: "-i,backend"
+        env:
+          QODANA_TOKEN: '${{ secrets.QODANA_TOKEN }}'
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:

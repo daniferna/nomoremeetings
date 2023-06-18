@@ -46,6 +46,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Qodana Scan
+      uses: JetBrains/qodana-action@main
+      with:
+        args: "-i,frontend"
+      env:
+        QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
