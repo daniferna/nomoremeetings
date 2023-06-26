@@ -19,11 +19,11 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(GoogleAuthenticationProvider.class);
     private final GoogleTokenVerifier verifier;
-    private final GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory;
+    private final AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
 
-    public GoogleAuthenticationProvider(GoogleTokenVerifier verifier, GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory) {
+    public GoogleAuthenticationProvider(GoogleTokenVerifier verifier, AuthorizationCodeFlowFactory authorizationCodeFlowFactory) {
         this.verifier = verifier;
-        this.googleAuthorizationCodeFlowFactory = googleAuthorizationCodeFlowFactory;
+        this.authorizationCodeFlowFactory = authorizationCodeFlowFactory;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
             try {
                 var result = verifier.verify((String) authenticationRequest.getSecret());
                 if (result.isValid()) {
-                    var authorizationCodeFlow = googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow();
+                    var authorizationCodeFlow = authorizationCodeFlowFactory.getGoogleAuthorizationCodeFlow();
 
                     var userCredentials = authorizationCodeFlow.loadCredential(result.getPayload().getEmail());
                     if (userCredentials == null) {

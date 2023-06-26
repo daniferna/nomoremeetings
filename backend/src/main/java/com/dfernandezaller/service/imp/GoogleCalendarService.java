@@ -1,6 +1,6 @@
 package com.dfernandezaller.service.imp;
 
-import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.model.Meeting;
@@ -12,7 +12,6 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Events;
-import com.google.common.annotations.VisibleForTesting;
 import io.micronaut.core.convert.ConversionService;
 import jakarta.inject.Singleton;
 
@@ -27,14 +26,14 @@ import java.util.Optional;
 public class GoogleCalendarService implements CalendarService {
 
     private final ConversionService<?> conversionService;
-    private final GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory;
+    private final AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
 
     private static final String APPLICATION_NAME = "nomoremeetings";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
-    public GoogleCalendarService(ConversionService<?> conversionService, GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory) {
+    public GoogleCalendarService(ConversionService<?> conversionService, AuthorizationCodeFlowFactory authorizationCodeFlowFactory) {
         this.conversionService = conversionService;
-        this.googleAuthorizationCodeFlowFactory = googleAuthorizationCodeFlowFactory;
+        this.authorizationCodeFlowFactory = authorizationCodeFlowFactory;
     }
 
     public List<Meeting> getCalendarMeetings(UserDTO user, LocalDate startDate, LocalDate endDate) {
@@ -57,7 +56,6 @@ public class GoogleCalendarService implements CalendarService {
                 .toList();
     }
 
-    @VisibleForTesting
     Calendar getCalendarService(String userEmail) throws IOException {
         final NetHttpTransport httpTransport;
         try {
@@ -66,7 +64,7 @@ public class GoogleCalendarService implements CalendarService {
             throw new BusinessException("Error occurred when trying to create a secured HTTP connection with Google", e);
         }
         return new Calendar.Builder(httpTransport, JSON_FACTORY,
-                googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow().loadCredential(userEmail))
+                authorizationCodeFlowFactory.getGoogleAuthorizationCodeFlow().loadCredential(userEmail))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }

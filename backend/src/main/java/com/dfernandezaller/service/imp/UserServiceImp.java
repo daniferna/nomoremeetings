@@ -1,6 +1,6 @@
 package com.dfernandezaller.service.imp;
 
-import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
 import com.dfernandezaller.configuration.GoogleConfiguration;
 import com.dfernandezaller.controller.dto.CalendarDTO;
 import com.dfernandezaller.controller.dto.UpdateUserDTO;
@@ -32,9 +32,9 @@ public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
     private final ConversionService<?> conversionService;
     private final GoogleConfiguration googleConfiguration;
-    private final GoogleAuthorizationCodeFlowFactory authorizationCodeFlowFactory;
+    private final AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
 
-    public UserServiceImp(UserRepository userRepository, ConversionService<?> conversionService, GoogleConfiguration googleConfiguration, GoogleAuthorizationCodeFlowFactory authorizationCodeFlowFactory) {
+    public UserServiceImp(UserRepository userRepository, ConversionService<?> conversionService, GoogleConfiguration googleConfiguration, AuthorizationCodeFlowFactory authorizationCodeFlowFactory) {
         this.userRepository = userRepository;
         this.conversionService = conversionService;
         this.googleConfiguration = googleConfiguration;
@@ -81,7 +81,7 @@ public class UserServiceImp implements UserService {
         try {
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             return new com.google.api.services.calendar.Calendar.Builder(httpTransport, JSON_FACTORY,
-                    authorizationCodeFlowFactory.getAuthorizationCodeFlow().loadCredential(userId))
+                    authorizationCodeFlowFactory.getGoogleAuthorizationCodeFlow().loadCredential(userId))
                     .setApplicationName(googleConfiguration.getApplicationName())
                     .build();
         } catch (IOException e) {

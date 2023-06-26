@@ -1,6 +1,6 @@
 package com.dfernandezaller.service.imp;
 
-import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.exceptions.BusinessException;
 import com.dfernandezaller.repository.UserRepository;
@@ -9,7 +9,6 @@ import com.dfernandezaller.service.AuthenticationService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.common.annotations.VisibleForTesting;
 import io.micronaut.core.convert.ConversionService;
 import io.micronaut.data.exceptions.DataAccessException;
 import jakarta.inject.Singleton;
@@ -28,8 +27,8 @@ public class GoogleAuthenticationService implements AuthenticationService {
     private final UserRepository userRepository;
     private final ConversionService<?> conversionService;
 
-    public GoogleAuthenticationService(GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory, UserRepository userRepository, ConversionService<?> conversionService) throws IOException {
-        this.authorizationCodeFlow = googleAuthorizationCodeFlowFactory.getAuthorizationCodeFlow();
+    public GoogleAuthenticationService(AuthorizationCodeFlowFactory authorizationCodeFlowFactory, UserRepository userRepository, ConversionService<?> conversionService) throws IOException {
+        this.authorizationCodeFlow = authorizationCodeFlowFactory.getGoogleAuthorizationCodeFlow();
         this.userRepository = userRepository;
         this.conversionService = conversionService;
     }
@@ -47,7 +46,6 @@ public class GoogleAuthenticationService implements AuthenticationService {
         return conversionService.convertRequired(userSaved, UserDTO.class);
     }
 
-    @VisibleForTesting
     void saveGoogleCredentials(String email, TokenResponse tokenResponse) {
         try {
             if (authorizationCodeFlow.getCredentialDataStore().containsKey(email)) {
@@ -61,7 +59,6 @@ public class GoogleAuthenticationService implements AuthenticationService {
         }
     }
 
-    @VisibleForTesting
     TokenResponse getTokenResponse(String token) {
         TokenResponse tokenResponse;
         try {

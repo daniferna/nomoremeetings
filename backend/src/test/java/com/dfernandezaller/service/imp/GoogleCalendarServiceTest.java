@@ -1,6 +1,6 @@
 package com.dfernandezaller.service.imp;
 
-import com.dfernandezaller.authentication.google.GoogleAuthorizationCodeFlowFactory;
+import com.dfernandezaller.authentication.google.AuthorizationCodeFlowFactory;
 import com.dfernandezaller.controller.dto.UserDTO;
 import com.dfernandezaller.exceptions.BusinessException;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -26,14 +26,14 @@ class GoogleCalendarServiceTest {
     private ConversionService<?> conversionService;
 
     @Mock
-    private GoogleAuthorizationCodeFlowFactory googleAuthorizationCodeFlowFactory;
+    private AuthorizationCodeFlowFactory authorizationCodeFlowFactory;
 
     private GoogleCalendarService googleCalendarService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        googleCalendarService = new GoogleCalendarService(conversionService, googleAuthorizationCodeFlowFactory);
+        googleCalendarService = new GoogleCalendarService(conversionService, authorizationCodeFlowFactory);
     }
 
     @Test
