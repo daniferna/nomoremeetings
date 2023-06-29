@@ -202,10 +202,9 @@ public class AnalyzeTimeServiceImp implements AnalyzeTimeService {
     }
 
     private static boolean hasMeetingInInterval(Meeting[] meetings, LocalTime start, LocalTime end) {
-        return Arrays.stream(meetings)
+        return Arrays.stream(meetings).anyMatch(Meeting::isAllDay) || Arrays.stream(meetings)
                 .anyMatch(meeting -> meeting.startTime().toLocalTime().isBefore(end)
                         && meeting.endTime().toLocalTime().isAfter(start)
                 );
     }
-
 }

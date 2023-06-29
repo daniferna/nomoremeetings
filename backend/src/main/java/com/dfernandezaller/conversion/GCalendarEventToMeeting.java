@@ -22,11 +22,20 @@ public class GCalendarEventToMeeting implements TypeConverter<Event, Meeting> {
         return Optional.of(
                 Meeting.builder()
                         .type(getEventType(object.getEventType(), object.getStatus()))
-                        .isAllDay(getStartDateTime(object).isDateOnly())
+                        .isAllDay(isAllDay(object))
                         .startTime(getStartTime(object))
                         .endTime(getEndTime(object))
                         .build()
         );
+    }
+
+    private static boolean isAllDay(Event object) {
+        if (getStartDateTime(object).isDateOnly()) {
+            return true;
+        }
+        return getStartTime(object).getHour() == 0 && getStartTime(object).getMinute() == 0
+                && getEndTime(object).getHour() == 0 && getEndTime(object).getMinute() == 0
+                && (getStartTime(object).getDayOfYear() + 1) == getEndTime(object).getDayOfYear();
     }
 
     private static LocalDateTime getStartTime(Event object) {
