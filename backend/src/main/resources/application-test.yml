@@ -3,9 +3,15 @@ micronaut:
     port: -1
     cors:
       enabled: true
+google:
+  clientId: '${GOOGLE_CLIENT_ID:test}'
+  clientSecret: '${GOOGLE_CLIENT_SECRET:test}'
 datasources:
   default:
+    url: jdbc:postgresql://localhost:5432/nomoremeetings
     db-type: postgres
     dialect: POSTGRES
+    username: sa
+    password: sa
 logger:
   levels: DEBUG

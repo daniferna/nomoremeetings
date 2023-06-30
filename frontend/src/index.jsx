@@ -10,9 +10,11 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
 root.render(
     <React.StrictMode>
-        <GoogleOAuthProvider clientId="814902779569-fhqsi7036j4a3jc0v52bf0n4bfchj997.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={clientId}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <App/>
             </LocalizationProvider>
